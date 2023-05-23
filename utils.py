@@ -1,11 +1,11 @@
+import numpy as np
+from keras.utils import to_categorical
+import cv2
+
 # Own imports
 import config
 import json
 import os
-
-import numpy as np
-from keras.utils import to_categorical
-import cv2
 
 
 def flt(x): return np.float32(x)

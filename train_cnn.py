@@ -1,9 +1,3 @@
-# Own imports
-import dataset
-from models import cnn
-import config
-import utils
-
 import time
 import torch
 from torch.utils.data import DataLoader
@@ -12,6 +6,12 @@ import torch
 import torch.nn as nn
 from torch.optim import Adam
 
+
+# Own imports
+import dataset
+from models import cnn
+import config
+import utils
 
 def main():
     idx = 0
