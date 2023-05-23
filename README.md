@@ -1,2 +1,2 @@
 # shARCathon
-<img align="left" src="sharcathon.png" width="250" alt="">
+<img align="left" src="images/sharcathon.png" width="250" alt="">
