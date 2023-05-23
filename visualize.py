@@ -1,14 +1,16 @@
-import numpy as np
-
-import seaborn as sns
-import plotly.express as px
-from matplotlib import colors
-import matplotlib.pyplot as plt
-import plotly.figure_factory as ff
-
 import config
 import json
 import os
+
+import numpy as np
+from matplotlib import colors
+import matplotlib.pyplot as plt
+
+
+# PATH to dataset to visualize
+DATA_PATH = config.TRAIN_PATH
+# Indices of images to visualize
+IDX_LIST = [1]
 
 def plot_examples(data_path, idx_list):
     """
@@ -67,11 +69,9 @@ def plot_examples(data_path, idx_list):
         ax[3].set_title('Test Output')
         plt.tight_layout()
         plt.show()
-        
-        
+            
 def main():
-    idx_list = [1]
-    plot_examples(config.TRAIN_PATH, idx_list)
+    plot_examples(DATA_PATH, IDX_LIST)
 
 if __name__ == '__main__':
     main()
