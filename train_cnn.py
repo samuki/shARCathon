@@ -2,10 +2,9 @@ import time
 import torch
 from torch.utils.data import DataLoader
 import numpy as np
-import torch
 import torch.nn as nn
 from torch.optim import Adam
-
+import pandas as pd
 
 # Own imports
 import dataset
@@ -19,24 +18,27 @@ def main():
     test_predictions = []
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     Xs_train, Xs_test, ys_train, ys_test = utils.load_data(config.TRAIN_PATH)
-
+    print("Data shapes")
+    print(len(Xs_train))
+    print(len(Xs_test))
+    print(len(ys_train))
+    print(len(ys_test))
     for X_train, y_train in zip(Xs_train, ys_train):
         print("TASK " + str(idx + 1))
-
         train_set = dataset.ARCDataset(X_train, y_train, stage="train")
         train_loader = DataLoader(train_set, batch_size=config.BATCH_SIZE, shuffle=True)
-
+        
         inp_dim = np.array(X_train[0]).shape
         outp_dim = np.array(y_train[0]).shape
         network = cnn.BasicCNNModel(inp_dim, outp_dim).to(device)
         optimizer = Adam(network.parameters(), lr=0.01)
         
-        for epoch in range(config.EPOCHS):
+        for _ in range(config.EPOCHS):
             for train_batch in train_loader:
-                train_X, train_y, out_d, d, out = train_batch
+                train_X, train_y, out_d, _, _ = train_batch
                 train_preds = network.forward(train_X.to(device), out_d.to(device))
+                print(train_preds.shape)
                 train_loss = nn.MSELoss()(train_preds, train_y.to(device))
-                
                 optimizer.zero_grad()
                 train_loss.backward()
                 optimizer.step()
@@ -55,6 +57,17 @@ def main():
                                                                     outp_dim,
                                                                     test_dim))))))
         idx += 1
+        
+    test_predictions = [[list(pred) for pred in test_pred] for test_pred in test_predictions]
+
+    for idx, pred in enumerate(test_predictions):
+        test_predictions[idx] = utils.flattener(pred)
+        
+    submission = pd.read_csv(config.OUT_PRED_PATH)
+    submission["output"] = test_predictions
+    submission.head()
+    submission.to_csv("submission.csv", index=False)
+
         
 if __name__ == '__main__':
     main()

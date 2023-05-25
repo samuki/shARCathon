@@ -1,13 +1,13 @@
 from pathlib import Path
 
 # Paths config
-TRAIN_PATH = Path('data/training')
+TRAIN_PATH = Path('data/toy')
 VALID_PATH = Path('data/evaluation')
-RESULT_PATH = Path('results/result.csv')
+OUT_PRED_PATH = Path('results/predictions.csv')
 
 # CNN config
 SIZE = 1000
-EPOCHS = 50
+EPOCHS = 2
 CONV_OUT_1 = 50
 CONV_OUT_2 = 100
 CONV_IN = 3
