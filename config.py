@@ -1,9 +1,9 @@
 from pathlib import Path
 
 # Paths config
-TRAIN_PATH = Path('data/toy')
+TRAIN_PATH = Path('data/training')
 VALID_PATH = Path('data/evaluation')
-OUT_PRED_PATH = Path('results/predictions.csv')
+OUT_PRED_PATH = 'results/'
 
 # CNN config
 SIZE = 1000

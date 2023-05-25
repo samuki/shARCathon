@@ -17,12 +17,13 @@ def main():
     start = time.time()
     test_predictions = []
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    Xs_train, Xs_test, ys_train, ys_test = utils.load_data(config.TRAIN_PATH)
+    Xs_train, Xs_test, ys_train, ys_test, labels = utils.load_data(config.TRAIN_PATH)
     print("Data shapes")
     print(len(Xs_train))
     print(len(Xs_test))
     print(len(ys_train))
     print(len(ys_test))
+    print(len(labels))
     for X_train, y_train in zip(Xs_train, ys_train):
         print("TASK " + str(idx + 1))
         train_set = dataset.ARCDataset(X_train, y_train, stage="train")
@@ -59,14 +60,9 @@ def main():
         idx += 1
         
     test_predictions = [[list(pred) for pred in test_pred] for test_pred in test_predictions]
-
-    for idx, pred in enumerate(test_predictions):
-        test_predictions[idx] = utils.flattener(pred)
-        
-    submission = pd.read_csv(config.OUT_PRED_PATH)
-    submission["output"] = test_predictions
-    submission.head()
-    submission.to_csv("submission.csv", index=False)
+    test_dict = dict(zip(labels, test_predictions))
+    utils.save_predictions(test_dict)
+    
 
         
 if __name__ == '__main__':

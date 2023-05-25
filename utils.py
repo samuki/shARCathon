@@ -58,7 +58,10 @@ def get_outp(outp, dictionary=None, replace=True):
 def load_data(path):
     files = sorted(os.listdir(path))
     tasks = []
+    labels = []
     for task_file in files:
+        taskname = task_file.split('.')[0]
+        labels.append(taskname)
         with open(str(path / task_file), 'r') as f:
             task = json.load(f)
         tasks.append(task)  
@@ -76,7 +79,7 @@ def load_data(path):
         ys_train.append(y_train)
         ys_test.append(y_test)
         
-    return Xs_train, Xs_test, ys_train, ys_test
+    return Xs_train, Xs_test, ys_train, ys_test, labels
 
 def plot_examples(data_path, idx_list):
     """
@@ -107,6 +110,7 @@ def plot_examples(data_path, idx_list):
         axs[3].set_title('Test Output')
         plt.tight_layout()
         plt.show()
+ 
         
 def flattener(pred):
     str_pred = str([row for row in pred])
@@ -115,3 +119,15 @@ def flattener(pred):
     str_pred = str_pred.replace('][', '|')
     str_pred = str_pred.replace(']]', '|')
     return str_pred
+
+
+def convert(o):
+    if isinstance(o, np.int64): return int(o)  
+    raise TypeError
+
+
+def save_predictions(preds):
+    for pred in preds:
+        pred_dict = {pred: [[int(i) for i in sublist] for sublist in preds[pred]]}
+        with open(config.OUT_PRED_PATH + pred+'_out'+'.json', 'w') as fp:
+            json.dump(pred_dict, fp)
