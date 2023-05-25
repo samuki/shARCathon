@@ -1,1 +1,5 @@
 opencv-python-headless
+tensorflow
+pytorch
+pandas
+matplotlib

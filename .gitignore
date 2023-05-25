@@ -2,6 +2,9 @@
 data/
 ARC-800-tasks.zip
 
+# output files
+results/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
