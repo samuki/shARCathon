@@ -2,14 +2,18 @@ import numpy as np
 import cv2
 from keras.utils import to_categorical
 import numpy as np
-from matplotlib import colors
+#from matplotlib import colors
 import matplotlib.pyplot as plt
+import matplotlib.colors
+
+import os
+import json
+import copy
 
 # Own imports
 import config
-import json
-import os
 
+# --------------------------- Helpers for the CNN ---------------------------------- #
 
 def flt(x): return np.float32(x)
 
@@ -53,6 +57,28 @@ def get_outp(outp, dictionary=None, replace=True):
     outp = to_categorical(outp.flatten(),
                           num_classes=10).flatten()
     return outp, outp_probs_len, outp_matrix_dims
+
+
+def load_results_json(path):
+    files = sorted(os.listdir(path))
+    tasks = {}
+    for task in files:
+        with open(str(path / task), 'r', encoding='utf-8') as f:
+            task = json.load(f)
+        tasks.update(task)
+    return tasks
+
+
+def load_train_json(path):
+    files = sorted(os.listdir(path))
+    tasks = {}
+    for task in files:
+        taskname = task.split('.')[0]
+        with open(str(path / task), 'r', encoding='utf-8') as f:
+            task = json.load(f)
+            test_out = {taskname: task["test"][0]["output"]}
+        tasks.update(test_out)
+    return tasks
 
 
 def load_data(path):
@@ -131,3 +157,65 @@ def save_predictions(preds):
         pred_dict = {pred: [[int(i) for i in sublist] for sublist in preds[pred]]}
         with open(config.OUT_PRED_PATH + pred+'_out'+'.json', 'w') as fp:
             json.dump(pred_dict, fp)
+            
+  
+ # --------------------------- Helpers for Language models ---------------------------------- #    
+        
+def load_json_data(folder):
+    json_files = [pos_json for pos_json in os.listdir(folder) if pos_json.endswith('.json')]
+    data = {}
+    for js in json_files:
+        with open(os.path.join(folder, js)) as json_file:
+            data[js] = json.load(json_file)
+    return data
+            
+            
+def plot_2d_grid(task_name,mode_name, data):
+    cvals  = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    colors = ["black", "dodgerblue", "red", "lightgreen", "yellow", "grey", "magenta", "orange", "lightblue", "brown"]
+    norm=plt.Normalize(min(cvals),max(cvals))
+    tuples = list(zip(map(norm,cvals), colors))
+    cmap = matplotlib.colors.LinearSegmentedColormap.from_list("", tuples)
+
+    fig, axs = plt.subplots(1, 3, figsize=(5, len(data['test']) * 3))
+    print(axs.shape)
+    axs[0].set_title('Test Input')
+    axs[0].set_xticks([]); axs[0].set_yticks([])
+    axs[0].imshow(np.array(data['test'][0]['input']), cmap=cmap, vmin=0, vmax=9)
+    axs[1].set_title('Test Output')
+    axs[1].set_xticks([]); axs[1].set_yticks([])
+    axs[1].imshow(np.array(data['test'][0]['output']), cmap=cmap, vmin=0, vmax=9)
+    # plot gpt output if present
+    if data['gpt_output'] is not None:
+        axs[2].set_title(mode_name+' Output')
+        axs[2].set_xticks([]); axs[2].set_yticks([])
+        axs[2].imshow(np.array(data['gpt_output']), cmap=cmap, vmin=0, vmax=9) 
+    else:
+        axs[2].axis('off')
+    plt.tight_layout()
+    plt.savefig('examples/'+task_name+'_'+mode_name+'_output'+'.png')
+
+    fig, axs = plt.subplots(len(data['train']), 2, figsize=(5, len(data['train']) * 3))
+    for i, example in enumerate(data['train']):
+        axs[i, 0].set_title(f'Training Input {i}', fontsize=20)
+        axs[i, 0].set_xticks([]); axs[i, 0].set_yticks([])
+        axs[i, 0].imshow(np.array(example['input']), cmap=cmap, vmin=0, vmax=9)
+        axs[i, 1].set_title(f'Training Output {i}', fontsize=20)
+        axs[i, 1].set_xticks([]); axs[i, 1].set_yticks([])
+        axs[i, 1].imshow(np.array(example['output']), cmap=cmap, vmin=0, vmax=9)
+    plt.tight_layout()
+    plt.savefig('examples/'+task_name+'_task'+'.png')
+    #plt.show()
+
+def plot_single_output(task_name,mode_name, data):
+    cvals  = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    colors = ["black", "dodgerblue", "red", "lightgreen", "yellow", "grey", "magenta", "orange", "lightblue", "brown"]
+    norm=plt.Normalize(min(cvals),max(cvals))
+    tuples = list(zip(map(norm,cvals), colors))
+    cmap = matplotlib.colors.LinearSegmentedColormap.from_list("", tuples)
+    fig, axs = plt.subplots(1, 1, figsize=(len(data['test'])*3, len(data['test'])*3))
+    axs.set_title(mode_name+' Output', fontsize=20)
+    axs.set_xticks([]); axs.set_yticks([])
+    axs.imshow(np.array(data['gpt_output']), cmap=cmap, vmin=0, vmax=9) 
+    plt.tight_layout()
+    plt.savefig('examples/'+task_name+'_'+mode_name+'_only_output'+'.png')
