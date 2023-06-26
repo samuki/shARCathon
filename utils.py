@@ -1,3 +1,5 @@
+from datetime import datetime
+import logging
 import numpy as np
 import cv2
 from keras.utils import to_categorical
@@ -10,6 +12,21 @@ import json
 
 # Own imports
 import config
+
+
+#----------------------------- Logging -------------------------------------- #
+
+def get_logger():
+    now = datetime.now()  # current date and time
+    log_name = now.strftime("%Y%m%d%H%M%S")
+    log_name = f"{log_name}.log"
+    log_dir = 'logs'
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    log_file_path = os.path.join(log_dir, log_name)
+    logging.basicConfig(level=logging.INFO, filename=log_file_path, filemode='w',
+                        format='%(asctime)s - %(levelname)s - %(message)s')
+    return logging.getLogger()
 
 # --------------------------- Helpers for the CNN ---------------------------------- #
 
