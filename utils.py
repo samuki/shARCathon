@@ -2,13 +2,11 @@ import numpy as np
 import cv2
 from keras.utils import to_categorical
 import numpy as np
-#from matplotlib import colors
 import matplotlib.pyplot as plt
 import matplotlib.colors
 
 import os
 import json
-import copy
 
 # Own imports
 import config
@@ -169,7 +167,8 @@ def load_json_data(folder):
             data[js] = json.load(json_file)
     return data
             
-            
+ # --------------------------- Helpers for Plotting ---------------------------------- #    
+    
 def plot_2d_grid(task_name,mode_name, data):
     cvals  = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     colors = ["black", "dodgerblue", "red", "lightgreen", "yellow", "grey", "magenta", "orange", "lightblue", "brown"]

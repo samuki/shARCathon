@@ -13,3 +13,11 @@ CONV_OUT_2 = 100
 CONV_IN = 3
 KERNEL_SIZE = 3
 BATCH_SIZE = 128
+
+
+# GPT config
+GPT_MODEL = "gpt-3.5-turbo-16k"
+#GPT_MODEL = "gpt-3.5-turbo"
+#GPT_MODEL = "gpt-4"
+TEMPERATURE = 0.8
+MAX_TOKENS = 4500
