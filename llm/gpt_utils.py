@@ -33,26 +33,23 @@ def get_task(json_task):
     json_task['test']['output'] = 'output_to_be_filled'
     return json_task
 
+
 def get_prompt(json_task):
     preamble = prompt_toolkit.BETTER_JSON_PREMEABLE
     return preamble + '\n\n' + str(get_task(json_task))
 
+
 def save_gpt_results(task_name, prompt, result):
     directory = "results/{}".format(config.GPT_MODEL)
-
     # check if directory exists and create otherwise
     if not os.path.exists(directory):
         os.makedirs(directory)
-
     # copy config.py to the new directory
     shutil.copyfile('config.py', os.path.join(directory, 'config.py'))
-
     # create a json output file
     output_file_name = os.path.join(directory, task_name + "_out.json")
-    
     # data to be written
     data = {"prompt": prompt, "output": result}
-    
     # writing to json file
     with open(output_file_name, 'w') as outfile:
         json.dump(data, outfile)

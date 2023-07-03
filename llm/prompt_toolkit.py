@@ -66,7 +66,7 @@ BETTER_JSON_PREMEABLE = '''You are given a series of inputs and output pairs.
     > combine two segments of the input into one single one based on a simple rule
     > rule can be certain values are prioritized over others, or combination of values into new ones
     You will recieve a json file with the following format:
-    {'train': [{'input': [], 'output': []}, {'input': [], 'output': []}, ...], , 
+    {'train': [{'input': [], 'output': []}, {'input': [], 'output': []}, ...], 
     'test': {'input':[], 'step_by_step': 'step_by_step_to_be_filled, 'output': 'output_to_be_filled'}}
     Do the following:
     - Start by filling in 'step_by_step' with the reasoning on the pattern input/output relation that holds for all input/output pairs.
