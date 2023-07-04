@@ -1,7 +1,7 @@
-import logging
 import copy
 # Count tokens before input
 import tiktoken
+from pathlib import Path
 
 import utils
 import config
@@ -20,6 +20,10 @@ def main():
     for task, value in tasks.items():
         logger.info("TASK %s", task)
         task_name = task.split('.')[0]
+        # Check if output has alrerady been generated
+        if Path(gpt_utils.get_directory()+"/"+task_name+"_out.json").is_file():
+            logger.info("TASK %s ALREADY EXISTS", task)
+            continue
         # Copy due to inplace changes
         json_task = copy.deepcopy(value)
         # Merge everything into the prompt

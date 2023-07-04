@@ -38,11 +38,13 @@ def get_prompt(json_task):
     preamble = config.PROMPT_TEMPLATE
     return preamble + '\n\n' + str(get_task(json_task))
 
-
-def save_gpt_results(task_name, prompt, result):
+def get_directory():
     dataset = str(config.PATH_SELECTION.resolve()).split('/')[-1]
     replace_comma = 'replace_comma' if config.REPLACE_COMMA else 'no_replace_comma'
-    directory = f"results/{dataset}/{replace_comma}/{config.GPT_MODEL}"
+    return f"results/{dataset}/{replace_comma}/{config.GPT_MODEL}"
+
+def save_gpt_results(task_name, prompt, result):
+    directory = get_directory()
     # check if directory exists and create otherwise
     if not os.path.exists(directory):
         os.makedirs(directory)
