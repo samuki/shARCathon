@@ -14,7 +14,7 @@ def main():
     logger = utils.get_logger()
     # Get token counter
     encoding = tiktoken.encoding_for_model(config.GPT_MODEL)
-    folder = 'data/evaluation'
+    folder = str(config.PATH_SELECTION.resolve())
     tasks = utils.load_json_data(folder)
     counter = 0
     for task, value in tasks.items():
@@ -23,7 +23,10 @@ def main():
         # Copy due to inplace changes
         json_task = copy.deepcopy(value)
         # Merge everything into the prompt
-        prompt = gpt_utils.get_prompt(json_task).replace(',', '')
+        prompt = gpt_utils.get_prompt(json_task)
+        # Replace comma in matrices
+        if config.REPLACE_COMMA:
+            prompt = prompt.replace(',', '')
         logger.info("PROMPT %s", prompt)
         # Get tokens number due to rate limit 
         encoding_len = len(encoding.encode(prompt))
@@ -35,11 +38,15 @@ def main():
         # Copy due to inplace changes
         json_task = copy.deepcopy(value)
         # Split system and user for for API call
-        system = prompt_toolkit.PREMEABLE
-        user = str(gpt_utils.get_task(json_task)).replace(',', '')
+        system = config.PROMPT_TEMPLATE
+        user = str(gpt_utils.get_task(json_task))
+        # Replace comma in matrices
+        if config.REPLACE_COMMA:
+            user = user.replace(',', '')
         # Call API
         result = gpt_utils.prompt_gpt(user, system=system)
         logger.info("RESULTS %s", result)
+        # Save results
         gpt_utils.save_gpt_results(task_name, prompt, result)
         logger.info("COUNTER %s", counter)
         counter += 1
