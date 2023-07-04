@@ -74,7 +74,8 @@ def basic_prompts(data):
 
 
 def basic_approach(prompt, max_len=1024):
-    generator = pipeline('text-generation', model='gpt2-large')
+    generator = pipeline('text-generation', model='gpt2')
+    # generator = pipeline('text-generation', model='gpt2-large')
     result = generator(prompt, num_return_sequences=1, max_length=max_len)
     result = result[0]['generated_text'].removeprefix(prompt)
     return result
