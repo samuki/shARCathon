@@ -5,9 +5,8 @@ from pathlib import Path
 
 import utils
 import config
-import llm.prompt_toolkit as prompt_toolkit
-import llm.gpt_utils as gpt_utils
-
+import llm.gpt_utils as gpt_utils    
+    
 
 def main():
     # Log results
@@ -27,7 +26,10 @@ def main():
         # Copy due to inplace changes
         json_task = copy.deepcopy(value)
         # Merge everything into the prompt
-        prompt = gpt_utils.get_prompt(json_task)
+        # Split system and user for for API call
+        system = config.PROMPT_TEMPLATE
+        user = str(gpt_utils.get_task(json_task))
+        prompt = system + user
         # Replace comma in matrices
         if config.REPLACE_COMMA:
             prompt = prompt.replace(',', '')
@@ -41,20 +43,17 @@ def main():
             continue
         # Copy due to inplace changes
         json_task = copy.deepcopy(value)
-        # Split system and user for for API call
-        system = config.PROMPT_TEMPLATE
-        user = str(gpt_utils.get_task(json_task))
         # Replace comma in matrices
         if config.REPLACE_COMMA:
             user = user.replace(',', '')
         # Call API
-        result = gpt_utils.prompt_gpt(user, system=system)
+        result = gpt_utils.prompt_gpt(user+system)
         logger.info("RESULTS %s", result)
         # Save results
         gpt_utils.save_gpt_results(task_name, prompt, result)
         logger.info("COUNTER %s", counter)
         counter += 1
-         
+        
 
 if __name__ == "__main__":
     main()

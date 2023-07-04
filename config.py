@@ -45,7 +45,8 @@ TEMPERATURE = 1
 TOP_P = 1
 
 # Replace , since the model can solve this too.
-REPLACE_COMMA = True
+REPLACE_COMMA = False
 
 # Prompt template
-PROMPT_TEMPLATE = prompt_toolkit.PREMEABLE
+PROMPT_TEMPLATE = prompt_toolkit.BETTER_STRUCTURE_PREMEABLE
+#PROMPT_TEMPLATE = prompt_toolkit.NO_PREMEABLE
