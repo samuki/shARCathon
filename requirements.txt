@@ -1,5 +1,7 @@
 opencv-python-headless
 tensorflow
-pytorch
+torch
 pandas
 matplotlib
+xformers
+transformers
