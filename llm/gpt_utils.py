@@ -29,13 +29,12 @@ def prompt_gpt(user, system=False):
 def get_task(json_task):
     # ensure only one test output
     json_task['test'] = json_task['test'][0]
-    json_task['test']['step_by_step'] = 'step_by_step_to_be_filled'
-    json_task['test']['output'] = 'output_to_be_filled'
+    json_task['test']['output'] = 'to_be_filled'
     return json_task
 
 
 def get_prompt(json_task):
-    preamble = prompt_toolkit.BETTER_JSON_PREMEABLE
+    preamble = prompt_toolkit.PREMEABLE
     return preamble + '\n\n' + str(get_task(json_task))
 
 
