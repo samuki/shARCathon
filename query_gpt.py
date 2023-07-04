@@ -23,7 +23,7 @@ def main():
         # Copy due to inplace changes
         json_task = copy.deepcopy(value)
         # Merge everything into the prompt
-        prompt = gpt_utils.get_prompt(json_task)
+        prompt = gpt_utils.get_prompt(json_task).replace(',', '')
         logger.info("PROMPT %s", prompt)
         # Get tokens number due to rate limit 
         encoding_len = len(encoding.encode(prompt))
@@ -35,8 +35,8 @@ def main():
         # Copy due to inplace changes
         json_task = copy.deepcopy(value)
         # Split system and user for for API call
-        system = prompt_toolkit.BETTER_JSON_PREMEABLE
-        user = str(gpt_utils.get_task(json_task))
+        system = prompt_toolkit.PREMEABLE
+        user = str(gpt_utils.get_task(json_task)).replace(',', '')
         # Call API
         result = gpt_utils.prompt_gpt(user, system=system)
         logger.info("RESULTS %s", result)
