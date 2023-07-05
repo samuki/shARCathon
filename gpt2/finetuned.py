@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
-from transformers import pipeline
+from transformers import pipeline, AutoModelWithLMHead, TrainingArguments, \
+    Trainer, TextDataset, DataCollatorForLanguageModeling, AutoTokenizer
 import numpy as np
+import os
 
 from . import \
     DEBUG, MODEL, NO_GENERATED_RESULTS, \
@@ -11,8 +13,64 @@ from . import \
 from .prompts import get_prompts
 
 
-def train():
+def check_model_exists(kind):
+    model_dir = f"./gpt2-finetuned-{kind}-model"
+    return os.path.exists(model_dir) and os.path.isdir(model_dir)
+
+
+def create_train_data(train_path, test_path, kind):
+    # TODO pjordan: Actually create data
     pass
+
+
+def train(kind):
+    model_dir = f"./gpt2-finetuned-{kind}-model"
+    train_path = f"./gpt2-finetuned-{kind}-data/train"
+    test_path = f"./gpt2-finetuned-{kind}-data/test"
+
+    tokenizer = AutoTokenizer.from_pretrained(MODEL)
+    model = AutoModelWithLMHead.from_pretrained(MODEL)
+    create_train_data(train_path, test_path, kind)
+
+    training_args = TrainingArguments(
+        output_dir=model_dir,  # The output directory
+        overwrite_output_dir=True,  # overwrite the content of the output dir
+        num_train_epochs=3,  # number of training epochs
+        per_device_train_batch_size=32,  # batch size for training
+        per_device_eval_batch_size=64,  # batch size for evaluation
+        eval_steps=400,  # Number of update steps between two evaluations.
+        save_steps=800,  # after # steps model is saved
+        warmup_steps=500,  # number of warmup steps for learning rate scheduler
+    )
+
+    train_dataset = TextDataset(
+        tokenizer=tokenizer,
+        file_path=train_path,
+        block_size=128)
+
+    test_dataset = TextDataset(
+        tokenizer=tokenizer,
+        file_path=test_path,
+        block_size=128)
+
+    data_collator = DataCollatorForLanguageModeling(
+        tokenizer=tokenizer, mlm=False,
+    )
+
+    trainer = Trainer(
+        model=model,
+        args=training_args,
+        data_collator=data_collator,
+        train_dataset=train_dataset,
+        eval_dataset=test_dataset,
+        prediction_loss_only=True,
+    )
+
+    # Start training
+    trainer.train()
+
+    # Save model for reuse later on
+    trainer.save_model()
 
 
 EXPECTED_CHARS = [str(i) for i in range(0, 10)] + [';', ' ']
@@ -35,9 +93,9 @@ def select_best_answer(answers):
     return answers[np.argmin(scores)]
 
 
-def basic_generator(prompt, max_len=MAX_NO_TOKENS):
-    # TODO pjordan: Use finetuned model instead
-    generator = pipeline('text-generation', model=MODEL)
+def basic_generator(prompt, kind='basic', max_len=MAX_NO_TOKENS):
+    model_dir = f"./gpt2-finetuned-{kind}-model"
+    generator = pipeline('text-generation', model=model_dir)
     results = generator(
         prompt, num_return_sequences=NO_GENERATED_RESULTS, max_length=max_len)
     answers = [result['generated_text'].removeprefix(
@@ -50,7 +108,11 @@ def main(kind='basic'):
     logger = get_logger()
     if DEBUG:
         logger.info = print
+
     data = load_json_data(DATA_DIR)
+    if not check_model_exists(kind):
+        train(kind)
+
     for task, value in data.items():
         logger.info(f"\t|> Task: {task}")
         prompts = get_prompts(value, kind=kind)
@@ -59,5 +121,5 @@ def main(kind='basic'):
             logger.info(f"\t|> Prompt: \n{prompt}")
             no_tokens = len(TOKENIZER(prompt)['input_ids']) \
                 + len(TOKENIZER(exp_result)['input_ids'])
-            result = basic_generator(prompt, max_len=(no_tokens))
+            result = basic_generator(prompt, kind=kind, max_len=no_tokens)
             logger.info(f"\t|> Result: \n{result}")
