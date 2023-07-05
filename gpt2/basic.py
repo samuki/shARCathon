@@ -8,7 +8,7 @@ from . import \
     MAX_NO_TOKENS, TOKENIZER, DATA_DIR, \
     load_json_data, get_expected_result, \
     get_logger
-from .prompts import get_basic_prompts
+from .prompts import get_prompts
 
 EXPECTED_CHARS = [str(i) for i in range(0, 10)] + [';', ' ']
 
@@ -40,14 +40,14 @@ def basic_generator(prompt, max_len=MAX_NO_TOKENS):
     return result
 
 
-def main():
+def main(kind='basic'):
     logger = get_logger()
     if DEBUG:
         logger.info = print
     data = load_json_data(DATA_DIR)
     for task, value in data.items():
         logger.info(f"\t|> Task: {task}")
-        prompts = get_basic_prompts(value)
+        prompts = get_prompts(value, kind=kind)
         exp_result = get_expected_result(value)
         for prompt in prompts:
             logger.info(f"\t|> Prompt: \n{prompt}")

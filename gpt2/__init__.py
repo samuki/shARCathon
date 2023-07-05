@@ -3,8 +3,8 @@ from transformers import set_seed, GPT2TokenizerFast
 
 # Configuration
 DEBUG = True
-MODEL = 'gpt2'
-# MODEL = 'gpt2-large'
+# MODEL = 'gpt2-small'
+MODEL = 'gpt2-large'
 # MODEL = 'gpt2-xl'
 NO_GENERATED_RESULTS = 10
 SEED = 42  # None

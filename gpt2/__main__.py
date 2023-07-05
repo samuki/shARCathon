@@ -17,7 +17,8 @@ if __name__ == '__main__':
         print(MISSING_ARGS_MSG)
         exit(1)
     if (sys.argv[1] == "basic"):
-        basic_main()
+        kind = sys.argv[2] if len(sys.argv) > 2 else 'basic'
+        basic_main(kind=kind)
     elif (sys.argv[1] == "finetuned"):
         finetuned_main()
     else:
