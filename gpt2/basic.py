@@ -66,7 +66,7 @@ def basic_short_prompts(data):
 # This is typically too long (over 1024 tokens)
 # Therefore we have to dynamically fallback to the method above
 def basic_prompt(data):
-    res = "Please continue the pattern:"
+    res = "Continue the pattern:"
     for d in data['train']:
         in_v = minimize_list_of_list(d['input'])
         res += "\nIn: " + in_v
