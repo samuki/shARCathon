@@ -4,6 +4,7 @@ ARC-800-tasks.zip
 
 # output files
 results/
+templates/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
