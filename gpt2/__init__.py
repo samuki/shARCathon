@@ -1,9 +1,10 @@
-import sys
+from utils import load_json_data, get_logger
 from transformers import set_seed, GPT2TokenizerFast
 
 # Configuration
-# MODEL = 'gpt2'
-MODEL = 'gpt2-large'
+DEBUG = True
+MODEL = 'gpt2'
+# MODEL = 'gpt2-large'
 # MODEL = 'gpt2-xl'
 NO_GENERATED_RESULTS = 10
 SEED = 42  # None
@@ -16,10 +17,6 @@ DATA_DIR = './data/evaluation/'
 # For reproducability
 if SEED is not None:
     set_seed(42)
-
-# Get access to the utils from one folder above
-sys.path.append('../')
-import utils
 
 
 def get_expected_result(data):

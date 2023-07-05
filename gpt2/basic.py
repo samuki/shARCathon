@@ -4,9 +4,10 @@ from transformers import pipeline
 import numpy as np
 
 from . import \
-    MODEL, NO_GENERATED_RESULTS, \
+    DEBUG, MODEL, NO_GENERATED_RESULTS, \
     MAX_NO_TOKENS, TOKENIZER, DATA_DIR, \
-    utils, get_expected_result
+    load_json_data, get_expected_result, \
+    get_logger
 from .prompts import get_basic_prompts
 
 EXPECTED_CHARS = [str(i) for i in range(0, 10)] + [';', ' ']
@@ -40,10 +41,10 @@ def basic_generator(prompt, max_len=MAX_NO_TOKENS):
 
 
 def main():
-    logger = utils.get_logger()
-    # TODO pjordan: This is for debugging only
-    logger.info = print
-    data = utils.load_json_data(DATA_DIR)
+    logger = get_logger()
+    if DEBUG:
+        logger.info = print
+    data = load_json_data(DATA_DIR)
     for task, value in data.items():
         logger.info(f"\t|> Task: {task}")
         prompts = get_basic_prompts(value)
