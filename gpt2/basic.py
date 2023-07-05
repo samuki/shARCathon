@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from transformers import pipeline, set_seed, GPT2TokenizerFast
+import numpy as np
 
 import sys
 # Get access to the utils from one folder above
@@ -8,16 +9,20 @@ sys.path.append('../')
 import utils
 
 
-# For reproducability
-set_seed(42)
-
 # Configuration
 # MODEL = 'gpt2'
 MODEL = 'gpt2-large'
 # MODEL = 'gpt2-xl'
-MAX_NO_TOKENS = 1024
+NO_GENERATED_RESULTS = 10
+SEED = 42  # None
 
+# Constants
+MAX_NO_TOKENS = 1024
 TOKENIZER = GPT2TokenizerFast.from_pretrained(MODEL)
+
+# For reproducability
+if SEED is not None:
+    set_seed(42)
 
 
 def get_expected_result(data):
@@ -100,14 +105,38 @@ def get_basic_prompts(data):
         return basic_short_res
 
     # What to do in this case?
-    print("\t|> Skipping this task (required tokens > 1024)", flush=True)
+    print(f"\t|> Skipping this task (required tokens > {MAX_NO_TOKENS})",
+          flush=True)
     return []
 
 
-def basic_approach(prompt, max_len=1024):
+EXPECTED_CHARS = [str(i) for i in range(0, 10)] + [';', ' ']
+
+
+def select_best_answer(answers):
+    if len(answers) <= 0:
+        return None
+    if len(answers) == 1:
+        return answers[0]
+
+    # Simple approach: Pick the answer with the least 'non-expected chars'
+    scores = len(answers) * [0]
+    for i, answer in enumerate(answers):
+        score = 0
+        for c in answer:
+            if c not in EXPECTED_CHARS:
+                score += 1
+        scores[i] = score
+    return answers[np.argmin(scores)]
+
+
+def basic_approach(prompt, max_len=MAX_NO_TOKENS):
     generator = pipeline('text-generation', model=MODEL)
-    result = generator(prompt, num_return_sequences=1, max_length=max_len)
-    result = result[0]['generated_text'].removeprefix(prompt)
+    results = generator(
+        prompt, num_return_sequences=NO_GENERATED_RESULTS, max_length=max_len)
+    answers = [result['generated_text'].removeprefix(
+        prompt) for result in results]
+    result = select_best_answer(answers)
     return result
 
 
@@ -126,7 +155,4 @@ if __name__ == '__main__':
             no_tokens = len(TOKENIZER(prompt)['input_ids']) \
                 + len(TOKENIZER(expected_result)['input_ids'])
             result = basic_approach(prompt, max_len=(no_tokens))
-            # NOTE pjordan: We can optimize this further by not generating
-            # unwanted tokens: Do something like len(prompt) + len(exp_result)
-            # but over the tokens and not string length
             logger.info(f"\t|> Result: \n{result}")
