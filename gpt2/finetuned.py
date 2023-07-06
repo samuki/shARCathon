@@ -4,6 +4,7 @@ from transformers import pipeline, AutoModelWithLMHead, TrainingArguments, \
     Trainer, TextDataset, DataCollatorForLanguageModeling, AutoTokenizer
 import numpy as np
 import os
+import random
 
 from . import \
     DEBUG, MODEL, NO_GENERATED_RESULTS, \
@@ -14,23 +15,33 @@ from .prompts import get_prompts
 
 
 def check_model_exists(kind):
-    model_dir = f"./gpt2-finetuned-{kind}-model"
+    model_dir = f"./gpt2/data/gpt2-finetuned-{kind}-model"
     return os.path.exists(model_dir) and os.path.isdir(model_dir)
 
 
-def create_train_data(train_path, test_path, kind):
-    # TODO pjordan: Actually create data
-    pass
+def create_train_data(data, train_path, test_path, kind, test_prob=0.15):
+    os.makedirs(os.path.dirname(train_path), exist_ok=True)
+    os.makedirs(os.path.dirname(test_path), exist_ok=True)
+    train_file = open(train_path, 'w+')
+    test_file = open(test_path, 'w+')
+    for value in data.values():
+        prompts = get_prompts(value, kind=kind)
+        exp_result = get_expected_result(value)
+        for prompt in prompts:
+            is_test = random.random() <= test_prob
+            f = train_file if not is_test else test_file
+            result = prompt + exp_result
+            f.write(result)
 
 
-def train(kind):
-    model_dir = f"./gpt2-finetuned-{kind}-model"
-    train_path = f"./gpt2-finetuned-{kind}-data/train"
-    test_path = f"./gpt2-finetuned-{kind}-data/test"
+def train(kind, data):
+    model_dir = f"./gpt2/data/gpt2-finetuned-{kind}-model"
+    train_path = f"./gpt2/data/gpt2-finetuned-{kind}-data/train"
+    test_path = f"./gpt2/data/gpt2-finetuned-{kind}-data/test"
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL)
     model = AutoModelWithLMHead.from_pretrained(MODEL)
-    create_train_data(train_path, test_path, kind)
+    create_train_data(data, train_path, test_path, kind)
 
     training_args = TrainingArguments(
         output_dir=model_dir,  # The output directory
@@ -63,7 +74,7 @@ def train(kind):
         data_collator=data_collator,
         train_dataset=train_dataset,
         eval_dataset=test_dataset,
-        prediction_loss_only=True,
+        # prediction_loss_only=True,
     )
 
     # Start training
@@ -94,7 +105,7 @@ def select_best_answer(answers):
 
 
 def basic_generator(prompt, kind='basic', max_len=MAX_NO_TOKENS):
-    model_dir = f"./gpt2-finetuned-{kind}-model"
+    model_dir = f"./gpt2/data/gpt2-finetuned-{kind}-model"
     generator = pipeline('text-generation', model=model_dir)
     results = generator(
         prompt, num_return_sequences=NO_GENERATED_RESULTS, max_length=max_len)
@@ -111,7 +122,7 @@ def main(kind='basic'):
 
     data = load_json_data(DATA_DIR)
     if not check_model_exists(kind):
-        train(kind)
+        train(kind, data)
 
     for task, value in data.items():
         logger.info(f"\t|> Task: {task}")

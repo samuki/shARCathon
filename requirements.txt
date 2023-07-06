@@ -5,3 +5,5 @@ pandas
 matplotlib
 xformers
 transformers
+psutil
+accelerate

@@ -15,7 +15,6 @@ python -m gpt2 finetuned
 python -m gpt2 basic"""
 
 if __name__ == '__main__':
-    print(sys.argv)
     if (len(sys.argv) <= 1):
         print(MISSING_ARGS_MSG)
         exit(1)
@@ -26,7 +25,11 @@ if __name__ == '__main__':
             exit(1)
         basic_main(kind=kind)
     elif (sys.argv[1] == "finetuned"):
-        finetuned_main()
+        kind = sys.argv[2] if len(sys.argv) > 2 else 'basic'
+        if kind not in PROMPT_KINDS:
+            print(WRONG_PROMPTKIND_MSG)
+            exit(1)
+        finetuned_main(kind=kind)
     else:
         print(WRONG_ARGS_MSG)
         exit(1)

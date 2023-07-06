@@ -19,7 +19,7 @@ PROMPT_AFTER = {
 }
 
 
-def short_prompts(data, kind='basic'):
+def short_prompts(data, kind='basic', with_answer=False):
     res_ls = []
     for d in data['train']:
         res = PROMPT_START[kind]
@@ -33,7 +33,12 @@ def short_prompts(data, kind='basic'):
         d = data['test'][0]
         in_v = minimize_list_of_list(d['input'])
         res += "\nIn: " + in_v
-        res += PROMPT_AFTER[kind]
+
+        if with_answer:
+            out_v = minimize_list_of_list(d['output'])
+            res += "Out: " + out_v
+        else:
+            res += PROMPT_AFTER[kind]
 
         res_ls.append(res)
 
@@ -42,7 +47,7 @@ def short_prompts(data, kind='basic'):
 
 # This is typically too long (over 1024 tokens)
 # Therefore we have to dynamically fallback to the method above
-def full_prompt(data, kind='basic'):
+def full_prompt(data, kind='basic', with_answer=False):
     res = PROMPT_START[kind]
 
     for d in data['train']:
@@ -56,12 +61,16 @@ def full_prompt(data, kind='basic'):
     d = data['test'][0]
     in_v = minimize_list_of_list(d['input'])
     res += "\nIn: " + in_v
-    res += PROMPT_AFTER[kind]
+    if with_answer:
+        out_v = minimize_list_of_list(d['output'])
+        res += "Out: " + out_v
+    else:
+        res += PROMPT_AFTER[kind]
 
     return res
 
 
-def get_prompts(data, kind='basic'):
+def get_prompts(data, kind='basic', with_answer=False):
     # First try the basic approach
     basic_res = full_prompt(data, kind=kind)
     answer_tokens = len(TOKENIZER(get_expected_result(data))['input_ids'])
@@ -72,7 +81,7 @@ def get_prompts(data, kind='basic'):
         return [basic_res]
 
     # Fall back to our next approach
-    basic_short_res = short_prompts(data, kind=kind)
+    basic_short_res = short_prompts(data, kind=kind, with_answer=with_answer)
 
     valid = True
     for r in basic_short_res:
