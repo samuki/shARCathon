@@ -106,7 +106,7 @@ def select_best_answer(answers):
 
 def basic_generator(prompt, kind='basic', max_len=MAX_NO_TOKENS):
     model_dir = f"./gpt2/data/gpt2-finetuned-{kind}-model"
-    generator = pipeline('text-generation', model=model_dir)
+    generator = pipeline('text-generation', model=MODEL)
     results = generator(
         prompt, num_return_sequences=NO_GENERATED_RESULTS, max_length=max_len)
     answers = [result['generated_text'].removeprefix(
