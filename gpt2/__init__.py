@@ -3,8 +3,8 @@ from transformers import set_seed, GPT2TokenizerFast
 import numpy as np
 
 # Configuration
-# DEBUG = False
-DEBUG = True
+DEBUG = False
+# DEBUG = True
 SEED = 42  # None
 
 # MODEL = 'gpt2-small'
