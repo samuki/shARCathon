@@ -2,33 +2,31 @@
 
 from transformers import pipeline, GPT2LMHeadModel, TrainingArguments, \
     Trainer, TextDataset, DataCollatorForLanguageModeling, GPT2Tokenizer
-import numpy as np
 import os
 import random
 
-from . import \
-    DEBUG, MODEL, NO_GENERATED_RESULTS, \
+from . import MODEL, NO_GENERATED_RESULTS, \
     MAX_NO_TOKENS, TOKENIZER, TRAIN_DATA_DIR, DATA_DIR, \
-    load_json_data, get_expected_result, \
-    get_logger
+    load_json_data, get_expected_result, select_best_answer
 from .prompts import get_prompts
 
 MODEL_DIR = os.path.abspath("./gpt2/data/gpt2-finetuned-model")
 TRAIN_PATH = os.path.abspath("./gpt2/data/gpt2-finetuned-data/train")
 TEST_PATH = os.path.abspath("./gpt2/data/gpt2-finetuned-data/test")
 
-def check_model_exists(kind):
+
+def check_model_exists():
     return os.path.exists(MODEL_DIR) and os.path.isdir(MODEL_DIR)
 
 
-def create_train_data(data, train_path, test_path, kind, test_prob=0.15):
+def create_train_data(data, train_path, test_path, kind, list_kind, test_prob=0.15):
     os.makedirs(os.path.dirname(train_path), exist_ok=True)
     os.makedirs(os.path.dirname(test_path), exist_ok=True)
     train_file = open(train_path, 'w+')
     test_file = open(test_path, 'w+')
     for value in data.values():
         prompts = get_prompts(value, kind=kind)
-        exp_result = get_expected_result(value)
+        exp_result = get_expected_result(value, list_kind=list_kind)
         for prompt in prompts:
             is_test = random.random() <= test_prob
             f = train_file if not is_test else test_file
@@ -36,10 +34,10 @@ def create_train_data(data, train_path, test_path, kind, test_prob=0.15):
             f.write(result)
 
 
-def train(kind, data):
+def train(kind, list_kind, data):
     tokenizer = GPT2Tokenizer.from_pretrained(MODEL)
     model = GPT2LMHeadModel.from_pretrained(MODEL)
-    create_train_data(data, TRAIN_PATH, TEST_PATH, kind)
+    create_train_data(data, TRAIN_PATH, TEST_PATH, list_kind, kind)
 
     training_args = TrainingArguments(
         output_dir=MODEL_DIR,  # The output directory
@@ -81,27 +79,7 @@ def train(kind, data):
     trainer.save_model()
 
 
-EXPECTED_CHARS = [str(i) for i in range(0, 10)] + [';', ' ']
-
-
-def select_best_answer(answers):
-    if len(answers) <= 0:
-        return None
-    if len(answers) == 1:
-        return answers[0]
-
-    # Simple approach: Pick the answer with the least 'non-expected chars'
-    scores = len(answers) * [0]
-    for i, answer in enumerate(answers):
-        score = 0
-        for c in answer:
-            if c not in EXPECTED_CHARS:
-                score += 1
-        scores[i] = score
-    return answers[np.argmin(scores)]
-
-
-def basic_generator(prompt, kind='basic', max_len=MAX_NO_TOKENS):
+def basic_generator(prompt, list_kind='small', max_len=MAX_NO_TOKENS):
     generator = pipeline('text-generation', model=MODEL_DIR, tokenizer=MODEL)
     results = generator(
         prompt, num_return_sequences=NO_GENERATED_RESULTS, max_length=max_len)
@@ -109,24 +87,20 @@ def basic_generator(prompt, kind='basic', max_len=MAX_NO_TOKENS):
         result['generated_text'].replace(prompt, '', 1)
         for result in results
     ]
-    result = select_best_answer(answers)
+    result = select_best_answer(answers, list_kind)
     return result
 
 
-def main(kind='basic'):
-    logger = get_logger()
-    if DEBUG:
-        logger.info = print
-
+def main(logger, kind='basic', list_kind='small'):
     global MODEL_DIR, TRAIN_PATH, TEST_PATH
-    MODEL_DIR = os.path.abspath(f"./gpt2/data/gpt2-finetuned-{kind}-model")
-    TRAIN_PATH = os.path.abspath(f"./gpt2/data/gpt2-finetuned-{kind}-data/train")
-    TEST_PATH = os.path.abspath(f"./gpt2/data/gpt2-finetuned-{kind}-data/test")
+    MODEL_DIR = os.path.abspath(f"./gpt2/data/gpt2-finetuned-{kind}-{list_kind}-model")
+    TRAIN_PATH = os.path.abspath(f"./gpt2/data/gpt2-finetuned-{kind}-{list_kind}-data/train")
+    TEST_PATH = os.path.abspath(f"./gpt2/data/gpt2-finetuned-{kind}-{list_kind}-data/test")
 
     data = load_json_data(DATA_DIR)
     train_data = load_json_data(TRAIN_DATA_DIR)
-    if not check_model_exists(kind):
-        train(kind, train_data)
+    if not check_model_exists():
+        train(kind, list_kind, train_data)
 
     for task, value in data.items():
         logger.info(f"\t|> Task: {task}")
@@ -136,6 +110,6 @@ def main(kind='basic'):
             logger.info(f"\t|> Prompt: \n{prompt}")
             no_tokens = len(TOKENIZER(prompt)['input_ids']) \
                 + len(TOKENIZER(exp_result)['input_ids'])
-            result = basic_generator(prompt, kind=kind, max_len=no_tokens)
+            result = basic_generator(prompt, list_kind=list_kind, max_len=no_tokens)
             logger.info(f"\t|> Result: \n{result}")
             logger.info(f"\t|> Expected Result: \n{exp_result}")
