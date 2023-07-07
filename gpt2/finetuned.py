@@ -102,7 +102,7 @@ def select_best_answer(answers):
 
 
 def basic_generator(prompt, kind='basic', max_len=MAX_NO_TOKENS):
-    generator = pipeline('text-generation', model=MODEL_DIR)
+    generator = pipeline('text-generation', model=MODEL_DIR, tokenizer=MODEL)
     results = generator(
         prompt, num_return_sequences=NO_GENERATED_RESULTS, max_length=max_len)
     answers = [result['generated_text'].removeprefix(
