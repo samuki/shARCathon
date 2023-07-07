@@ -105,8 +105,10 @@ def basic_generator(prompt, kind='basic', max_len=MAX_NO_TOKENS):
     generator = pipeline('text-generation', model=MODEL_DIR, tokenizer=MODEL)
     results = generator(
         prompt, num_return_sequences=NO_GENERATED_RESULTS, max_length=max_len)
-    answers = [result['generated_text'].removeprefix(
-        prompt) for result in results]
+    answers = [
+        result['generated_text'].replace(prompt, '', 1)
+        for result in results
+    ]
     result = select_best_answer(answers)
     return result
 
@@ -133,5 +135,4 @@ def main(kind='basic'):
             logger.info(f"\t|> Prompt: \n{prompt}")
             no_tokens = len(TOKENIZER(prompt)['input_ids']) \
                 + len(TOKENIZER(exp_result)['input_ids'])
-            result = basic_generator(prompt, kind=kind, max_len=no_tokens)
-            logger.info(f"\t|> Result: \n{result}")
+            result = basic_generator(prompt, kind=kind, max_len=no_tokens
