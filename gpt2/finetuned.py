@@ -137,3 +137,4 @@ def main(kind='basic'):
                 + len(TOKENIZER(exp_result)['input_ids'])
             result = basic_generator(prompt, kind=kind, max_len=no_tokens)
             logger.info(f"\t|> Result: \n{result}")
+            logger.info(f"\t|> Expected Result: \n{exp_result}")

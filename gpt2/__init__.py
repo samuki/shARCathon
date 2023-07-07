@@ -2,7 +2,9 @@ from utils import load_json_data, get_logger
 from transformers import set_seed, GPT2TokenizerFast
 
 # Configuration
-DEBUG = True
+DEBUG = False
+# DEBUG = True
+
 # MODEL = 'gpt2-small'
 MODEL = 'gpt2-large'
 # MODEL = 'gpt2-xl'
