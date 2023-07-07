@@ -2,8 +2,8 @@ from utils import load_json_data, get_logger
 from transformers import set_seed, GPT2TokenizerFast
 
 # Configuration
-DEBUG = False
-# DEBUG = True
+# DEBUG = False
+DEBUG = True
 
 # MODEL = 'gpt2-small'
 MODEL = 'gpt2-large'
@@ -14,6 +14,7 @@ SEED = 42  # None
 # Constants
 MAX_NO_TOKENS = 1024
 TOKENIZER = GPT2TokenizerFast.from_pretrained(MODEL)
+TRAIN_DATA_DIR = './data/training/'
 DATA_DIR = './data/evaluation/'
 
 # For reproducability

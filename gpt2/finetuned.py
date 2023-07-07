@@ -8,7 +8,7 @@ import random
 
 from . import \
     DEBUG, MODEL, NO_GENERATED_RESULTS, \
-    MAX_NO_TOKENS, TOKENIZER, DATA_DIR, \
+    MAX_NO_TOKENS, TOKENIZER, TRAIN_DATA_DIR, DATA_DIR, \
     load_json_data, get_expected_result, \
     get_logger
 from .prompts import get_prompts
@@ -124,8 +124,9 @@ def main(kind='basic'):
     TEST_PATH = os.path.abspath(f"./gpt2/data/gpt2-finetuned-{kind}-data/test")
 
     data = load_json_data(DATA_DIR)
+    train_data = load_json_data(TRAIN_DATA_DIR)
     if not check_model_exists(kind):
-        train(kind, data)
+        train(kind, train_data)
 
     for task, value in data.items():
         logger.info(f"\t|> Task: {task}")
