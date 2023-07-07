@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from transformers import pipeline, GPT2LMHeadModel, TrainingArguments, \
-    Trainer, TextDataset, DataCollatorForLanguageModeling, AutoTokenizer
+    Trainer, TextDataset, DataCollatorForLanguageModeling, GPT2Tokenizer
 import numpy as np
 import os
 import random
@@ -13,10 +13,12 @@ from . import \
     get_logger
 from .prompts import get_prompts
 
+MODEL_DIR = os.path.abspath("./gpt2/data/gpt2-finetuned-model")
+TRAIN_PATH = os.path.abspath("./gpt2/data/gpt2-finetuned-data/train")
+TEST_PATH = os.path.abspath("./gpt2/data/gpt2-finetuned-data/test")
 
 def check_model_exists(kind):
-    model_dir = f"./gpt2/data/gpt2-finetuned-{kind}-model"
-    return os.path.exists(model_dir) and os.path.isdir(model_dir)
+    return os.path.exists(MODEL_DIR) and os.path.isdir(MODEL_DIR)
 
 
 def create_train_data(data, train_path, test_path, kind, test_prob=0.15):
@@ -35,16 +37,12 @@ def create_train_data(data, train_path, test_path, kind, test_prob=0.15):
 
 
 def train(kind, data):
-    model_dir = f"./gpt2/data/gpt2-finetuned-{kind}-model"
-    train_path = f"./gpt2/data/gpt2-finetuned-{kind}-data/train"
-    test_path = f"./gpt2/data/gpt2-finetuned-{kind}-data/test"
-
-    tokenizer = AutoTokenizer.from_pretrained(MODEL)
+    tokenizer = GPT2Tokenizer.from_pretrained(MODEL)
     model = GPT2LMHeadModel.from_pretrained(MODEL)
-    create_train_data(data, train_path, test_path, kind)
+    create_train_data(data, TRAIN_PATH, TEST_PATH, kind)
 
     training_args = TrainingArguments(
-        output_dir=model_dir,  # The output directory
+        output_dir=MODEL_DIR,  # The output directory
         overwrite_output_dir=True,  # overwrite the content of the output dir
         num_train_epochs=3,  # number of training epochs
         per_device_train_batch_size=8,  # batch size for training
@@ -56,12 +54,12 @@ def train(kind, data):
 
     train_dataset = TextDataset(
         tokenizer=tokenizer,
-        file_path=train_path,
+        file_path=TRAIN_PATH,
         block_size=128)
 
     test_dataset = TextDataset(
         tokenizer=tokenizer,
-        file_path=test_path,
+        file_path=TEST_PATH,
         block_size=128)
 
     data_collator = DataCollatorForLanguageModeling(
@@ -74,7 +72,6 @@ def train(kind, data):
         data_collator=data_collator,
         train_dataset=train_dataset,
         eval_dataset=test_dataset,
-        # prediction_loss_only=True,
     )
 
     # Start training
@@ -105,8 +102,7 @@ def select_best_answer(answers):
 
 
 def basic_generator(prompt, kind='basic', max_len=MAX_NO_TOKENS):
-    model_dir = f"./gpt2/data/gpt2-finetuned-{kind}-model"
-    generator = pipeline('text-generation', model=model_dir)
+    generator = pipeline('text-generation', model=MODEL_DIR)
     results = generator(
         prompt, num_return_sequences=NO_GENERATED_RESULTS, max_length=max_len)
     answers = [result['generated_text'].removeprefix(
@@ -119,6 +115,11 @@ def main(kind='basic'):
     logger = get_logger()
     if DEBUG:
         logger.info = print
+
+    global MODEL_DIR, TRAIN_PATH, TEST_PATH
+    MODEL_DIR = os.path.abspath(f"./gpt2/data/gpt2-finetuned-{kind}-model")
+    TRAIN_PATH = os.path.abspath(f"./gpt2/data/gpt2-finetuned-{kind}-data/train")
+    TEST_PATH = os.path.abspath(f"./gpt2/data/gpt2-finetuned-{kind}-data/test")
 
     data = load_json_data(DATA_DIR)
     if not check_model_exists(kind):
