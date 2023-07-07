@@ -4,12 +4,15 @@ from transformers import set_seed, GPT2TokenizerFast
 # Configuration
 # DEBUG = False
 DEBUG = True
+SEED = 42  # None
 
 # MODEL = 'gpt2-small'
 MODEL = 'gpt2-large'
 # MODEL = 'gpt2-xl'
 NO_GENERATED_RESULTS = 10
-SEED = 42  # None
+
+# LIST_REPR = 'tiny'  # separate entries with spaces and lines with ;
+LIST_REPR = 'normal'  # separate entries with , and lines with ],[
 
 # Constants
 MAX_NO_TOKENS = 1024
@@ -32,9 +35,21 @@ def get_expected_result(data):
 
 
 def minimize_list_of_list(ll):
-    res = ""
+    if LIST_REPR == 'normal':
+        res = "["
+    else:
+        res = ""
+
     for lst in ll:
-        # Remove commas to reduce num of tokens required
-        # and separate list of lists with ;
-        res += " ".join(map(str, lst)) + "; "
-    return res[:-2]
+        if LIST_REPR == 'tiny':
+            # Remove commas to reduce num of tokens required
+            # and separate list of lists with ;
+            res += " ".join(map(str, lst)) + "; "
+        elif LIST_REPR == 'normal':
+            res += ",".join(map(str, lst)) + "],["
+
+    res = res[:-2]
+    if LIST_REPR == 'normal':
+        res = "[" + res + "]"
+
+    return res
