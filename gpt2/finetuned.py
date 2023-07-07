@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from transformers import pipeline, AutoModelWithLMHead, TrainingArguments, \
+from transformers import pipeline, GPT2LMHeadModel, TrainingArguments, \
     Trainer, TextDataset, DataCollatorForLanguageModeling, AutoTokenizer
 import numpy as np
 import os
@@ -40,15 +40,15 @@ def train(kind, data):
     test_path = f"./gpt2/data/gpt2-finetuned-{kind}-data/test"
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL)
-    model = AutoModelWithLMHead.from_pretrained(MODEL)
+    model = GPT2LMHeadModel.from_pretrained(MODEL)
     create_train_data(data, train_path, test_path, kind)
 
     training_args = TrainingArguments(
         output_dir=model_dir,  # The output directory
         overwrite_output_dir=True,  # overwrite the content of the output dir
         num_train_epochs=3,  # number of training epochs
-        per_device_train_batch_size=32,  # batch size for training
-        per_device_eval_batch_size=64,  # batch size for evaluation
+        per_device_train_batch_size=8,  # batch size for training
+        per_device_eval_batch_size=16,  # batch size for evaluation
         eval_steps=400,  # Number of update steps between two evaluations.
         save_steps=800,  # after # steps model is saved
         warmup_steps=500,  # number of warmup steps for learning rate scheduler
@@ -106,7 +106,7 @@ def select_best_answer(answers):
 
 def basic_generator(prompt, kind='basic', max_len=MAX_NO_TOKENS):
     model_dir = f"./gpt2/data/gpt2-finetuned-{kind}-model"
-    generator = pipeline('text-generation', model=MODEL)
+    generator = pipeline('text-generation', model=model_dir)
     results = generator(
         prompt, num_return_sequences=NO_GENERATED_RESULTS, max_length=max_len)
     answers = [result['generated_text'].removeprefix(
