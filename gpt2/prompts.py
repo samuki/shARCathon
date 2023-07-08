@@ -3,19 +3,22 @@
 from . import MAX_NO_TOKENS, TOKENIZER, \
     minimize_list_of_list, get_expected_result
 
-PROMPT_KINDS = ['basic', 'step-by-step']
+PROMPT_KINDS = ['basic', 'step-by-step', 'apply-patterns']
 
 PROMPT_START = {
     'basic': "Continue the pattern",
-    'step-by-step': "Do the following:\nWhat is the step by step description of the input/output relation that holds for all example input/output pairs?"
+    'step-by-step': "Do the following:\nWhat is the step by step description of the input/output relation that holds for all example input/output pairs?",
+    'apply-patterns': "",
 }
 PROMPT_DIVIDER = {
     'basic': "",
-    'step-by-step': "\nYou now have all the information to solve the task. Apply this description to the following test input and write you answer as 'Out: '"
+    'step-by-step': "\nYou now have all the information to solve the task. Apply this description to the following test input and write you answer as 'Out: '",
+    'apply-patterns': "\nApply the patterns from the above examples:",
 }
 PROMPT_AFTER = {
     'basic': "\nOut: ",
-    'step-by-step': ""
+    'step-by-step': "",
+    'apply-patterns': "\nOut: ",
 }
 
 
