@@ -93,7 +93,7 @@ def get_prompts(data, kind='basic', list_kind='small', with_answer=False):
         if no_tokens > MAX_NO_TOKENS:
             valid = False
     if valid:
-        return basic_short_res
+        return basic_short_res[:min(2, len(basic_short_res))]
 
     # What to do in this case?
     print(f"\t|> Skipping this task (required tokens > {MAX_NO_TOKENS})",

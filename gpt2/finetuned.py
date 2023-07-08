@@ -25,7 +25,7 @@ def create_train_data(data, train_path, test_path, kind, list_kind, test_prob=0.
     train_file = open(train_path, 'w+')
     test_file = open(test_path, 'w+')
     for value in data.values():
-        prompts = get_prompts(value, kind=kind)
+        prompts = get_prompts(value, kind=kind, list_kind=list_kind)
         exp_result = get_expected_result(value, list_kind=list_kind)
         for prompt in prompts:
             is_test = random.random() <= test_prob
@@ -37,7 +37,7 @@ def create_train_data(data, train_path, test_path, kind, list_kind, test_prob=0.
 def train(kind, list_kind, data):
     tokenizer = GPT2Tokenizer.from_pretrained(MODEL)
     model = GPT2LMHeadModel.from_pretrained(MODEL)
-    create_train_data(data, TRAIN_PATH, TEST_PATH, list_kind, kind)
+    create_train_data(data, TRAIN_PATH, TEST_PATH, kind, list_kind)
 
     training_args = TrainingArguments(
         output_dir=MODEL_DIR,  # The output directory
@@ -104,7 +104,7 @@ def main(logger, kind='basic', list_kind='small'):
 
     for task, value in data.items():
         logger.info(f"\t|> Task: {task}")
-        prompts = get_prompts(value, kind=kind)
+        prompts = get_prompts(value, kind=kind, list_kind=list_kind)
         exp_result = get_expected_result(value)
         for prompt in prompts:
             logger.info(f"\t|> Prompt: \n{prompt}")
