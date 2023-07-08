@@ -32,21 +32,32 @@ BATCH_SIZE = 128
 PATH_SELECTION = VALID_SMALL_PATH
 
 # GPT Models
-GPT_MODEL = "gpt-3.5-turbo-16k"
+#GPT_MODEL = "gpt-3.5-turbo-16k"
 #GPT_MODEL = "gpt-3.5-turbo"
-#GPT_MODEL = "gpt-4"
+GPT_MODEL = "gpt-4"
 
 # Max token configuration to avoid length limit
-MAX_TOKENS = 6000
-MODEL_MAX_TOKENS = 16000
+MAX_TOKENS = 4000
+#MAX_TOKENS = 6000
+#MODEL_MAX_TOKENS = 16000
+MODEL_MAX_TOKENS = 8192
 
 # OpenAI API parameters
 TEMPERATURE = 1
 TOP_P = 1
 
 # Replace , since the model can solve this too.
-REPLACE_COMMA = False
+REPLACE_COMMA = True
+REPLACE_SPACE = False
+SEMICOLON = False
+BRACKTES = False
 
+REPLACE_NUMBER_COLOR = False
+REPLACE_NUMBER_WORD = False
+REPLACE_NUMBER_BINARY = False
+REPLACE_NUMBER_LEET = False
+REPLACE_NUMBER_CHAR = True
+REPLACE_NUMBER_SP_CHAR = False
 # Prompt template
-PROMPT_TEMPLATE = prompt_toolkit.BETTER_STRUCTURE_PREMEABLE
-#PROMPT_TEMPLATE = prompt_toolkit.NO_PREMEABLE
+#PROMPT_TEMPLATE = prompt_toolkit.BETTER_STRUCTURE_PREMEABLE
+PROMPT_TEMPLATE = prompt_toolkit.NO_PREMEABLE
