@@ -1,6 +1,7 @@
 # dataset
 data/
 ARC-800-tasks.zip
+.DS_Store
 
 # output files
 results/
