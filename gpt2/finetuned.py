@@ -102,6 +102,7 @@ def main(logger, kind='basic', list_kind='small'):
     if not check_model_exists():
         train(kind, list_kind, train_data)
 
+    count = 0
     for task, value in data.items():
         logger.info(f"\t|> Task: {task}")
         prompts = get_prompts(value, kind=kind, list_kind=list_kind)
@@ -113,3 +114,7 @@ def main(logger, kind='basic', list_kind='small'):
             result = basic_generator(prompt, list_kind=list_kind, max_len=no_tokens)
             logger.info(f"\t|> Result: \n{result}")
             logger.info(f"\t|> Expected Result: \n{exp_result}")
+        if len(prompts) > 0:
+            count += 1
+        if count > 30:
+            break
