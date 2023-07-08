@@ -106,7 +106,7 @@ def main(logger, kind='basic', list_kind='small'):
     for task, value in data.items():
         logger.info(f"\t|> Task: {task}")
         prompts = get_prompts(value, kind=kind, list_kind=list_kind)
-        exp_result = get_expected_result(value)
+        exp_result = get_expected_result(value, list_kind)
         for prompt in prompts:
             logger.info(f"\t|> Prompt: \n{prompt}")
             no_tokens = len(TOKENIZER(prompt)['input_ids']) \
