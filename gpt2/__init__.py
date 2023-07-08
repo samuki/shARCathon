@@ -8,9 +8,9 @@ DEBUG = False
 SEED = 42  # None
 
 # MODEL = 'gpt2-small'
-# MODEL = 'gpt2-large'
-MODEL = 'gpt2-xl'
-NO_GENERATED_RESULTS = 10
+MODEL = 'gpt2-large'
+# MODEL = 'gpt2-xl'
+NO_GENERATED_RESULTS = 5
 
 LIST_REPR_KINDS = [
     'tiny',  # separate entries with spaces and lines with ;
