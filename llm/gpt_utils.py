@@ -145,6 +145,16 @@ def preprocess_prompt(task):
     return preprocess_representation(intro+ train_string + divider + test_string)
 
 
+def preprocess_self_correction(task):
+    intro = "Do the following:\nWhat is the step by step description of the input/output relation that holds for all example input/output pairs?\n"
+    train_string = "Examples: "
+    for example in task['train']:
+        train_string += f"input: {str(example['input'])} output: {str(example['output'])} \n"
+    divider = "Apply this description to test input and identify errors in the test output.\n"
+    test_string = f"Test: input: {str(task['test']['input'])} output:"
+    return preprocess_representation(intro+ train_string + divider + test_string)
+
+
 def preprocess_prompt_other(task):
     intro = "Do the following:\nWhat is the step by step pattern that holds for all example input/output pairs?\n"
     train_string = "Examples: "
@@ -153,12 +163,21 @@ def preprocess_prompt_other(task):
     divider = "Apply this pattern to the test input and write the answer as 'output: '\n"
     test_string = f"Test: input: {str(task['test']['input'])} output:"
     return preprocess_representation(intro+ train_string + divider + test_string)
-    
-def get_task(json_task):
+   
+   
+def naive_postprocessing(prediction):
+    """Performs simple post-processing on model prediction"""
+    return prediction.split(':')[-1].replace("\n", "").strip()
+
+ 
+def get_task(json_task, self_correction=False):
     # ensure only one test output
     json_task['test'] = json_task['test'][0]
     json_task['test']['output'] = ''
-    return preprocess_prompt(json_task)
+    if self_correction:
+        return preprocess_self_correction(json_task)
+    else:
+        return preprocess_prompt(json_task)
 
 
 def get_prompt(json_task):

@@ -31,12 +31,6 @@ def postprocess_representation(representation):
         representation = representation.replace(';', ':')
     return json.loads(representation)
 
-
-def naive_postprocessing(prediction):
-    """Performs simple post-processing on model prediction"""
-    return prediction.split(':')[-1].replace("\n", "").strip()
-
-
 def evaluate_model_performance(ground_truth_folder, model_predictions_folder):
     """Evaluate the performance of language model"""
     task_files = list(ground_truth_folder.glob('*.json'))
@@ -52,7 +46,7 @@ def evaluate_model_performance(ground_truth_folder, model_predictions_folder):
             ground_truth_out = str(ground_truth['test'][0]['output'])
             ground_truth_out = gpt_utils.preprocess_representation(ground_truth_out)
             result = prediction['output']["choices"][0]["message"]["content"]
-            postprocessed_result = naive_postprocessing(result)
+            postprocessed_result = gpt_utils.naive_postprocessing(result)
             #print(postprocessed_result)
             try:
                 json_postprocessed_result = postprocess_representation(postprocessed_result)

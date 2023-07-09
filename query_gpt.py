@@ -36,10 +36,7 @@ def main():
         # Get tokens number due to rate limit 
         encoded = encoding.encode(prompt)
         encoded_len = len(encoded)
-        print('PROMPT', prompt)
-        print("ENCODING", encoded)
-        print([encoding.decode_single_token_bytes(token) for token in encoded])
-        print("ENCODING_LEN", len(encoded))
+        
         
         logger.info("ENCODING LEN %s", encoded_len)
         # Test if the prompt is too long
@@ -50,6 +47,14 @@ def main():
         json_task = copy.deepcopy(value) 
         # Call API
         result = gpt_utils.prompt_gpt(user+system)
+        print(f'First {gpt_utils.naive_postprocessing(result["choices"][0]["message"]["content"])}')
+        if config.SELF_CONSISTENCY:
+            prediction = gpt_utils.naive_postprocessing(result["choices"][0]["message"]["content"])
+            user = str(gpt_utils.get_task(json_task, self_correction=True))
+            prompt = system+user+f"{prediction}. Now write the correct output:"
+            logger.info("SELF CONSISTENCY PROMPT %s", prompt)
+            result = gpt_utils.prompt_gpt(prompt)
+            print(f'Second {gpt_utils.naive_postprocessing(result["choices"][0]["message"]["content"])}')
         logger.info("RESULTS %s", result)
         # Save results
         gpt_utils.save_gpt_results(task_name, prompt, result)
