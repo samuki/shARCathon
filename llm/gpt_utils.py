@@ -112,7 +112,7 @@ def preprocess_representation(prompt):
             prompt = re.sub(r'(\d) (\d)', r'\1\2', prompt)
     if config.SEMICOLON:
         prompt = prompt.replace('] [', '; ').replace("[[", ";;").replace("]]", ";;")
-    if config.BRACKTES:
+    if config.BRACKETS:
         prompt = prompt.replace("[", "'").replace("]", "'").replace("[[", "''").replace("]]", "''")
     if config.REPLACE_NUMBER_COLOR:
         for key, value in COLOR_NUMBER_DICT.items():
