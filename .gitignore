@@ -5,6 +5,7 @@ ARC-800-tasks.zip
 
 # output files
 results/
+representation_results/
 templates/
 
 # Byte-compiled / optimized / DLL files
