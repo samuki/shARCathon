@@ -37,12 +37,31 @@ def preprocess(task):
     
     return intro+train_string + divider + test_string
     
-    
+
+def preprocess_task2(task):
+    # intro =  "Do the following:\nWhat is the step by step description of the input/output relation that holds for all example input/output pairs?\n"
+    train_string = "Training input/output pairs: "
+    for example in task['train']:
+        train_string += f"input: {str(example['input'])} output: {str(example['output'])} \n"
+    #divider = "The test input and write you answer as 'output: '\n"
+    #test_string = f"You now have all the information to solve the task. Apply this information to determin whether the test output is correct for this input: {str(task['test']['input'])} \n Explain your reasoning and answer with yes or no and a confidence level between 0 - 100."
+    test_string = f"Apply the patterns from the above examples to determin whether the test output is correct for this input: {str(task['test']['input'])} \nExplain your reasoning shortly and answer with yes or no and a confidence level between 0% and 100% for your answer."
+
+    return train_string + test_string
+
+
 def get_task(json_task):
     # ensure only one test output
     json_task['test'] = json_task['test'][0]
     json_task['test']['output'] = ''
     return preprocess(json_task)
+
+def get_task2(json_task):
+    # ensure only one test output
+    json_task['test'] = json_task['test'][0]
+    json_task['test']['output'] = ''
+    return preprocess_task2(json_task)
+
 
 
 def get_prompt(json_task):
