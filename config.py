@@ -28,25 +28,51 @@ BATCH_SIZE = 128
 
 # ---------------------- GPT CONFIG ---------------------
 
+#OPENAI_ENDPOINT = "Completion"
+OPENAI_ENDPOINT = "Chat"
+
 # Select experiments to run
 PATH_SELECTION = VALID_SMALL_PATH
 
 # GPT Models
+
 GPT_MODEL = "gpt-3.5-turbo-16k"
+#GPT_MODEL = "code-davinci-002"
+#GPT_MODEL = "text-davinci-002"
 #GPT_MODEL = "gpt-3.5-turbo"
 #GPT_MODEL = "gpt-4"
 
 # Max token configuration to avoid length limit
-MAX_TOKENS = 6000
-MODEL_MAX_TOKENS = 16000
+MAX_TOKENS = 4000
+#MAX_TOKENS = 6000
+#MODEL_MAX_TOKENS = 16000
+MODEL_MAX_TOKENS = 8192
 
 # OpenAI API parameters
-TEMPERATURE = 1
+TEMPERATURE = 0
 TOP_P = 1
-
+LOG_PROBS = 5
 # Replace , since the model can solve this too.
-REPLACE_COMMA = False
+REPLACE_COMMA = True
+REPLACE_SPACE = False
+SEMICOLON = False
+BRACKETS = False
 
+REPLACE_NUMBER_COLOR = False
+REPLACE_NUMBER_WORD = False
+REPLACE_NUMBER_BINARY = False
+REPLACE_NUMBER_LEET = False
+REPLACE_NUMBER_CHAR = False
+REPLACE_NUMBER_SP_CHAR = False
 # Prompt template
-PROMPT_TEMPLATE = prompt_toolkit.BETTER_STRUCTURE_PREMEABLE
+#PROMPT_TEMPLATE = prompt_toolkit.BETTER_STRUCTURE_PREMEABLE
 #PROMPT_TEMPLATE = prompt_toolkit.NO_PREMEABLE
+PROMPT_TEMPLATE = prompt_toolkit.PREMEABLE
+
+
+SELF_CONSISTENCY = False
+DOUBLE_SELF_CONSISTENCY = False
+
+ADD_TRAINING = False
+#SELECTED_TRAINING_TASKS = ['0d3d703e.json', '1e0a9b12.json']
+SELECTED_TRAINING_TASKS = ['0d3d703e.json', '1e0a9b12.json', '3c9b0459.json']

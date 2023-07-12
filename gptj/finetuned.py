@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# TODO pjordan Adapt this to GPT-J
+
 from transformers import pipeline, GPT2LMHeadModel, TrainingArguments, \
     Trainer, TextDataset, DataCollatorForLanguageModeling, GPT2Tokenizer
 import os
@@ -10,9 +12,9 @@ from . import MODEL, NO_GENERATED_RESULTS, \
     load_json_data, get_expected_result, select_best_answer
 from .prompts import get_prompts
 
-MODEL_DIR = os.path.abspath("./gpt2/data/gpt2-finetuned-model")
-TRAIN_PATH = os.path.abspath("./gpt2/data/gpt2-finetuned-data/train")
-TEST_PATH = os.path.abspath("./gpt2/data/gpt2-finetuned-data/test")
+MODEL_DIR = os.path.abspath("./gptj/data/gptj-finetuned-model")
+TRAIN_PATH = os.path.abspath("./gptj/data/gptj-finetuned-data/train")
+TEST_PATH = os.path.abspath("./gptj/data/gptj-finetuned-data/test")
 
 
 def check_model_exists():
@@ -92,16 +94,16 @@ def basic_generator(generator, prompt, list_kind='small', max_len=MAX_NO_TOKENS)
 
 def main(logger, kind='basic', list_kind='small'):
     global MODEL_DIR, TRAIN_PATH, TEST_PATH
-    MODEL_DIR = os.path.abspath(f"./gpt2/data/gpt2-finetuned-{kind}-{list_kind}-model")
-    TRAIN_PATH = os.path.abspath(f"./gpt2/data/gpt2-finetuned-{kind}-{list_kind}-data/train")
-    TEST_PATH = os.path.abspath(f"./gpt2/data/gpt2-finetuned-{kind}-{list_kind}-data/test")
+    MODEL_DIR = os.path.abspath(f"./gptj/data/gptj-finetuned-{kind}-{list_kind}-model")
+    TRAIN_PATH = os.path.abspath(f"./gptj/data/gptj-finetuned-{kind}-{list_kind}-data/train")
+    TEST_PATH = os.path.abspath(f"./gptj/data/gptj-finetuned-{kind}-{list_kind}-data/test")
 
     data = load_json_data(DATA_DIR)
     train_data = load_json_data(TRAIN_DATA_DIR)
     if not check_model_exists():
         train(kind, list_kind, train_data)
 
-    generator = pipeline('text-generation', model=MODEL, device="cuda:0")
+    generator = pipeline('text-generation', model=MODEL_DIR, tokenizer=MODEL, device="cuda:0")
 
     count = 0
     for task, value in data.items():

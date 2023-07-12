@@ -7,3 +7,5 @@ xformers
 transformers
 psutil
 accelerate
+datasets 
+nvidia-ml-py3
