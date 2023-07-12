@@ -10,7 +10,7 @@ from .prompts import get_prompts
 
 
 def basic_generator(prompt, list_kind='small', max_len=None):
-    generator = pipeline('text-generation', model=MODEL)
+    generator = pipeline('text-generation', model=MODEL, device="cuda:0")
     results = generator(
         prompt, num_return_sequences=NO_GENERATED_RESULTS, max_length=max_len)
     answers = [
