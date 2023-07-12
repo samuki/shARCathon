@@ -14,6 +14,7 @@ mv ./data/evaluation_small ./data/evaluation
 # This script tests all possible versions
 
 # # GPT 2
+# echo "Evaluating GPT2"
 # TOKENIZERS_PARALLELISM="false" python -m gpt2 basic basic tiny
 # TOKENIZERS_PARALLELISM="false" python -m gpt2 finetuned basic tiny
 # TOKENIZERS_PARALLELISM="false" python -m gpt2 basic step-by-step tiny
@@ -36,6 +37,7 @@ mv ./data/evaluation_small ./data/evaluation
 # TOKENIZERS_PARALLELISM="false" python -m gpt2 finetuned apply-patterns normal
 
 # GPT Neo
+echo "Evaluating GPT Neo"
 # TOKENIZERS_PARALLELISM="false" python -m gptneo basic basic tiny
 # TOKENIZERS_PARALLELISM="false" python -m gptneo finetuned basic tiny
 # TOKENIZERS_PARALLELISM="false" python -m gptneo basic step-by-step tiny
@@ -58,6 +60,7 @@ TOKENIZERS_PARALLELISM="false" python -m gptneo basic apply-patterns normal
 # TOKENIZERS_PARALLELISM="false" python -m gptneo finetuned apply-patterns normal
 
 # GPT J
+echo "Evaluating GPT J"
 # TOKENIZERS_PARALLELISM="false" python -m gptj basic basic tiny
 # TOKENIZERS_PARALLELISM="false" python -m gptj finetuned basic tiny
 # TOKENIZERS_PARALLELISM="false" python -m gptj basic step-by-step tiny

@@ -3,7 +3,7 @@ from transformers import set_seed, AutoTokenizer
 import numpy as np
 
 # Configuration
-DEBUG = True
+DEBUG = False
 # DEBUG = True
 SEED = 42  # None
 
