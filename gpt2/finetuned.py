@@ -79,8 +79,7 @@ def train(kind, list_kind, data):
     trainer.save_model()
 
 
-def basic_generator(prompt, list_kind='small', max_len=MAX_NO_TOKENS):
-    generator = pipeline('text-generation', model=MODEL_DIR, tokenizer=MODEL)
+def basic_generator(generator, prompt, list_kind='small', max_len=MAX_NO_TOKENS):
     results = generator(
         prompt, num_return_sequences=NO_GENERATED_RESULTS, max_length=max_len)
     answers = [
@@ -102,6 +101,8 @@ def main(logger, kind='basic', list_kind='small'):
     if not check_model_exists():
         train(kind, list_kind, train_data)
 
+    generator = pipeline('text-generation', model=MODEL, device="cuda:0")
+
     count = 0
     for task, value in data.items():
         logger.info(f"\t|> Task: {task}")
@@ -111,7 +112,7 @@ def main(logger, kind='basic', list_kind='small'):
             logger.info(f"\t|> Prompt: \n{prompt}")
             no_tokens = len(TOKENIZER(prompt)['input_ids']) \
                 + len(TOKENIZER(exp_result)['input_ids'])
-            result = basic_generator(prompt, list_kind=list_kind, max_len=no_tokens)
+            result = basic_generator(generator, prompt, list_kind=list_kind, max_len=no_tokens)
             logger.info(f"\t|> Result: \n{result}")
             logger.info(f"\t|> Expected Result: \n{exp_result}")
         if len(prompts) > 0:

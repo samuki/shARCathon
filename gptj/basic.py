@@ -10,8 +10,7 @@ from . import \
 from .prompts import get_prompts
 
 
-def basic_generator(prompt, list_kind='small', max_len=MAX_NO_TOKENS):
-    generator = pipeline('text-generation', model=MODEL, device="cuda:0")
+def basic_generator(generator, prompt, list_kind='small', max_len=MAX_NO_TOKENS):
     results = generator(
         prompt, num_return_sequences=NO_GENERATED_RESULTS, max_length=max_len)
     answers = [
@@ -24,6 +23,7 @@ def basic_generator(prompt, list_kind='small', max_len=MAX_NO_TOKENS):
 
 def main(logger, kind='basic', list_kind='small'):
     data = load_json_data(DATA_DIR)
+    generator = pipeline('text-generation', model=MODEL, device="cuda:0")
     for task, value in data.items():
         logger.info(f"\t|> Task: {task}")
         prompts = get_prompts(value, kind=kind, list_kind=list_kind)
@@ -33,5 +33,5 @@ def main(logger, kind='basic', list_kind='small'):
             no_tokens = len(TOKENIZER(prompt)['input_ids']) \
                 + len(TOKENIZER(exp_result)['input_ids'])
             logger.info(f"\t|> Expected Result: \n{exp_result}")
-            result = basic_generator(prompt, list_kind=list_kind, max_len=no_tokens)
+            result = basic_generator(generator, prompt, list_kind=list_kind, max_len=no_tokens)
             logger.info(f"\t|> Result: \n{result}")
