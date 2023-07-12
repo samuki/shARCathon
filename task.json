@@ -1,0 +1,289 @@
+{
+    "evaluation" : [
+        {
+            "index" : 0,
+            "name" : "00576224",
+            "main_task" : "repeat_pattern_with_rotation"
+        },
+        {
+            "index" : 1,
+            "name" : "0692e18c",
+            "main_task" : "spread_out"
+        },
+        {
+            "index" : 2,
+            "name" : "0c786b71",
+            "main_task" : "repeat_pattern_with_rotation"
+        },
+        {
+            "index" : 3,
+            "name" : "15696249",
+            "main_task" : "complete_sub_pattern"
+        },
+        {
+            "index" : 4,
+            "name" : "17cae0c1",
+            "main_task" : "detect_pattern"
+        },
+        {
+            "index" : 5,
+            "name" : "2072aba6",
+            "main_task" : "fill_pattern"
+        },
+        {
+            "index" : 6,
+            "name" : "27f8ce4f",
+            "main_task" : "complete_sub_pattern"
+        }, 
+        {
+            "index" : 7,
+            "name" : "310f3251",
+            "main_task" : "repeat_pattern_and_add_neighboring_pixels"
+        },
+        {
+            "index" : 8,
+            "name" : "31d5ba1a",
+            "main_task" : "unknown"
+        },
+        {
+            "index" : 9,
+            "name" : "34b99a2b",
+            "main_task" : "unknown"
+        },
+        {
+            "index" : 10,
+            "name" : "3979b1a8",
+            "main_task" : "complete_sub_pattern"
+        },
+        {
+            "index" : 11,
+            "name" : "3b4c2228",
+            "main_task" : "unknown"
+        },
+        {
+            "index" : 12,
+            "name" : "48131b3c",
+            "main_task" : "repeat_pattern_with_inversion"
+        },
+        {
+            "index" : 13,
+            "name" : "48f8583b",
+            "main_task" : "complete_sub_pattern"
+        },
+        {
+            "index" : 14,
+            "name" : "4cd1b7b2",
+            "main_task" : "fill_missing_pixels"
+        },
+        {
+            "index" : 15,
+            "name" : "506d28a5",
+            "main_task" : "union"
+        },
+        {
+            "index" : 16,
+            "name" : "50a16a69",
+            "main_task" : "extend_pattern"
+        },
+        {
+            "index" : 17,
+            "name" : "59341089",
+            "main_task" : "extend_pattern"
+        },
+        {
+            "index" : 18,
+            "name" : "5b6cbef5",
+            "main_task" : "complete_sub_pattern"
+        },
+        {
+            "index" : 19,
+            "name" : "60c09cac",
+            "main_task" : "copy_input"
+        },
+        {
+            "index" : 20,
+            "name" : "626c0bcc",
+            "main_task" : "detect_shapes"
+        },
+        {
+            "index" : 21,
+            "name" : "66e6c45b",
+            "main_task" : "spread_out"
+        },
+        {
+            "index" : 22,
+            "name" : "",
+            "main_task" : "fill_pattern"
+        },
+        {
+            "index" : 23,
+            "name" : "695367ec",
+            "main_task" : "fill_pattern"
+        },
+        {
+            "index" : 24,
+            "name" : "6ea4a07e",
+            "main_task" : "invert_pattern"
+        },
+        {
+            "index" : 25,
+            "name" : "7953d61e",
+            "main_task" : "repeat_pattern_with_rotation"
+        },
+        {
+            "index" : 26,
+            "name" : "8719f442",
+            "main_task" : "complete_sub_pattern"
+        },
+        {
+            "index" : 27,
+            "name" : "8b28cd80",
+            "main_task" : "unknown"
+        },
+        {
+            "index" : 28,
+            "name" : "8ba14f53",
+            "main_task" : "unknown"
+        },
+        {
+            "index" : 29,
+            "name" : "8e2edd66",
+            "main_task" : "complete_sub_pattern"
+        },
+        {
+            "index" : 30,
+            "name" : "9110e3c5",
+            "main_task" : "fix_output"
+        },
+        {
+            "index" : 31,
+            "name" : "a59b95c0",
+            "main_task" : "extend_pattern"
+        },
+        {
+            "index" : 32,
+            "name" : "a8610ef7",
+            "main_task" : "unknown"
+        },
+        {
+            "index" : 33,
+            "name" : "aa18de87",
+            "main_task" : "fill_shape"
+        },
+        {
+            "index" : 34,
+            "name" : "ad7e01d0",
+            "main_task" : "complete_sub_pattern"
+        },
+        {
+            "index" : 35,
+            "name" : "ae58858e",
+            "main_task" : "detect_shapes"
+        },
+        {
+            "index" : 36,
+            "name" : "b1fc8b8e",
+            "main_task" : "spread_out"
+        },
+        {
+            "index" : 37,
+            "name" : "bbb1b8b6",
+            "main_task" : "union"
+        },
+        {
+            "index" : 38,
+            "name" : "bc4146bd",
+            "main_task" : "repeat_pattern_with_rotation"
+        },
+        {
+            "index" : 39,
+            "name" : "be03b35f",
+            "main_task" : "fill_pattern"
+        },
+        {
+            "index" : 40,
+            "name" : "c1990cce",
+            "main_task" : "extend_pattern"
+        },
+        {
+            "index" : 41,
+            "name" : "c48954c1",
+            "main_task" : "repeat_pattern_with_rotation"
+        },
+        {
+            "index" : 42,
+            "name" : "c92b942c",
+            "main_task" : "repeat_pattern_and_add_neighboring_pixels"
+        },
+        {
+            "index" : 43,
+            "name" : "ca8de6ea",
+            "main_task" : "spread_out"
+        },
+        {
+            "index" : 44,
+            "name" : "ccd554ac",
+            "main_task" : "extend_pattern"
+        },
+        {
+            "index" : 45,
+            "name" : "d017b73f",
+            "main_task" : "spread_out"
+        },
+        {
+            "index" : 46,
+            "name" : "d19f7514",
+            "main_task" : "crop"
+        },
+        {
+            "index" : 47,
+            "name" : "d4b1c2b1",
+            "main_task" : "copy_input"
+        },
+        {
+            "index" : 48,
+            "name" : "e133d23d",
+            "main_task" : "union"
+        },
+        {
+            "index" : 49,
+            "name" : "e21a174a",
+            "main_task" : "reorder"
+        },
+        {
+            "index" : 50,
+            "name" : "e345f17b",
+            "main_task" : "no_overlap"
+        },
+        {
+            "index" : 51,
+            "name" : "e633a9e5",
+            "main_task" : "scale"
+        },
+        {
+            "index" : 52,
+            "name" : "e6de6e8f",
+            "main_task" : "unknown"
+        },
+        {
+            "index" : 53,
+            "name" : "ed74f2f2",
+            "main_task" : "choose_larger"
+        },
+        {
+            "index" : 54,
+            "name" : "ed98d772",
+            "main_task" : "repeat_pattern_with_rotation"
+        },
+        {
+            "index" : 55,
+            "name" : "f0afb749",
+            "main_task" : "extend_pattern"
+        },
+        {
+            "index" : 56,
+            "name" : "fb791726",
+            "main_task" : "extend_pattern"
+        }
+    ]
+}
