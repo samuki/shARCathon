@@ -23,6 +23,7 @@ def main():
         task_name = task.split('.')[0]
         # Check if output has alrerady been generated
         if Path(gpt_utils.get_directory()+"/"+task_name+"_out.json").is_file():
+            print("continuing", task_name)
             logger.info("TASK %s ALREADY EXISTS", task)
             continue
         # Copy due to inplace changes

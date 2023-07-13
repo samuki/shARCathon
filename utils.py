@@ -2,7 +2,7 @@ from datetime import datetime
 import logging
 import numpy as np
 import cv2
-from keras.utils import to_categorical
+#from keras.utils import to_categorical
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors
@@ -63,7 +63,7 @@ def get_new_matrix(X):
         X = np.array([X[0]])
     return X
 
-
+"""
 def get_outp(outp, dictionary=None, replace=True):
     if replace:
         outp = replace_values(outp, dictionary)
@@ -72,7 +72,7 @@ def get_outp(outp, dictionary=None, replace=True):
     outp = to_categorical(outp.flatten(),
                           num_classes=10).flatten()
     return outp, outp_probs_len, outp_matrix_dims
-
+"""
 
 def load_results_json(path):
     files = sorted(os.listdir(path))
