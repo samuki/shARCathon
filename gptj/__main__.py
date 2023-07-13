@@ -2,9 +2,11 @@
 from .basic import main as basic_main
 from .finetuned import main as finetuned_main
 from .prompts import PROMPT_KINDS
-from . import LIST_REPR_KINDS, DEBUG, get_logger
+from . import LIST_REPR_KINDS
 
+import os
 import sys
+import time
 
 WRONG_LISTREPR_MSG = "Unexpected argument! Please use one of:\n" + \
     "\n".join(["python -m gptj basic basic " + kind for kind in LIST_REPR_KINDS])
@@ -21,11 +23,7 @@ python -m gptj finetuned
 python -m gptj basic"""
 
 if __name__ == '__main__':
-    logger = get_logger()
-    if DEBUG:
-        logger.info = print
-
-    logger.info(f"\t|> Called with following args: {' '.join(sys.argv)}")
+    print(f"\t|> Called with following args: {' '.join(sys.argv)}")
 
     if (len(sys.argv) <= 1):
         print(MISSING_ARGS_MSG)
@@ -41,10 +39,13 @@ if __name__ == '__main__':
         print(WRONG_LISTREPR_MSG)
         exit(1)
 
+    json_path = f'./results/{"".join(sys.argv).replace("/", "")}/{time.time()}.json'
+    os.makedirs(os.path.dirname(json_path), exist_ok=True)
+
     if (sys.argv[1] == "basic"):
-        basic_main(logger, kind=kind, list_kind=line_kind)
+        basic_main(json_path, kind=kind, list_kind=line_kind)
     elif (sys.argv[1] == "finetuned"):
-        finetuned_main(logger, kind=kind, list_kind=line_kind)
+        finetuned_main(json_path, kind=kind, list_kind=line_kind)
     else:
         print(WRONG_ARGS_MSG)
         exit(1)
