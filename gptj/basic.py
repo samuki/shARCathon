@@ -24,7 +24,8 @@ def basic_generator(generator, prompt, list_kind='small', max_len=MAX_NO_TOKENS)
 
 def main(json_path, kind='basic', list_kind='small'):
     data = load_json_data(DATA_DIR)
-    generator = pipeline('text-generation', model=MODEL, device="cuda:0")
+    generator = pipeline('text-generation', model=MODEL,
+                         device="cuda:0", temperatur=0.0)
     for task, value in data.items():
         print(f"\t|> Task: {task}")
         prompts = get_prompts(value, kind=kind, list_kind=list_kind)

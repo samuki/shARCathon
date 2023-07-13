@@ -109,7 +109,8 @@ def main(json_path, kind='basic', list_kind='small'):
     if not check_model_exists():
         train(kind, list_kind, train_data)
 
-    generator = pipeline('text-generation', model=MODEL_DIR, tokenizer=MODEL, device="cuda:0")
+    generator = pipeline('text-generation', model=MODEL_DIR, tokenizer=MODEL, 
+                         device="cuda:0", temperatur=0.0)
 
     for task, value in data.items():
         print(f"\t|> Task: {task}")
