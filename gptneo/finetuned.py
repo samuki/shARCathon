@@ -2,7 +2,7 @@
 
 # TODO pjordan: Adapt this to GPTNeo
 
-from transformers import pipeline, GPT2LMHeadModel, TrainingArguments, \
+from transformers import pipeline,  GPTNeoForCausalLM, TrainingArguments, \
     Trainer, TextDataset, DataCollatorForLanguageModeling, GPT2Tokenizer
 import os
 import random
@@ -39,7 +39,7 @@ def create_train_data(data, train_path, test_path, kind, list_kind, test_prob=0.
 
 def train(kind, list_kind, data):
     tokenizer = GPT2Tokenizer.from_pretrained(MODEL)
-    model = GPT2LMHeadModel.from_pretrained(MODEL)
+    model = GPTNeoForCausalLM.from_pretrained(MODEL)
     create_train_data(data, TRAIN_PATH, TEST_PATH, kind, list_kind)
 
     training_args = TrainingArguments(
