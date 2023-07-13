@@ -15,6 +15,13 @@ mv ./data/evaluation_small ./data/evaluation
 
 # # GPT 2
 echo "Evaluating GPT2"
+python -m gpt2 basic basic no-space
+python -m gpt2 finetuned basic no-space
+python -m gpt2 basic step-by-step no-space
+python -m gpt2 finetuned step-by-step no-space
+python -m gpt2 basic apply-patterns no-space
+python -m gpt2 finetuned apply-patterns no-space
+
 python -m gpt2 basic basic tiny
 python -m gpt2 finetuned basic tiny
 python -m gpt2 basic step-by-step tiny
