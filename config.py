@@ -53,8 +53,12 @@ TEMPERATURE = 0
 TOP_P = 1
 LOG_PROBS = 5
 # Replace , since the model can solve this too.
+SPARSE_MATRIX = False
+COMPRESS = False
+
 REPLACE_COMMA = True
 REPLACE_SPACE = False
+REPLACE_SPACE2 = False
 SEMICOLON = False
 BRACKETS = False
 
@@ -62,13 +66,17 @@ REPLACE_NUMBER_COLOR = False
 REPLACE_NUMBER_WORD = False
 REPLACE_NUMBER_BINARY = False
 REPLACE_NUMBER_LEET = False
-REPLACE_NUMBER_CHAR = False
+REPLACE_NUMBER_CHAR = True
 REPLACE_NUMBER_SP_CHAR = False
 # Prompt template
 #PROMPT_TEMPLATE = prompt_toolkit.BETTER_STRUCTURE_PREMEABLE
-#PROMPT_TEMPLATE = prompt_toolkit.NO_PREMEABLE
-PROMPT_TEMPLATE = prompt_toolkit.PREMEABLE
+PROMPT_TEMPLATE = prompt_toolkit.NO_PREMEABLE
+#PROMPT_TEMPLATE = prompt_toolkit.PREMEABLE
 
+CREATE_DESCRIPTION = False
+USE_DESCRIPTION = False
+DESCRIPTION_PATH = Path('results/evaluation_small_description/replace_comma/gpt-3.5-turbo-16k/')
+#DESCRIPTION_PATH = Path('results/evaluation_small_description/replace_comma/gpt-4/')
 
 SELF_CONSISTENCY = False
 DOUBLE_SELF_CONSISTENCY = False
