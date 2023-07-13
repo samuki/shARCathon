@@ -11,6 +11,7 @@ MODEL = 'gpt2-large'
 NO_GENERATED_RESULTS = 5
 
 LIST_REPR_KINDS = [
+    'no-space',
     'tiny',  # separate entries with spaces and lines with ;
     'small',  # separate entries with spaces and lines with ] [
     'normal',  # separate entries with , and lines with ],[
@@ -69,9 +70,11 @@ def minimize_list_of_list(ll, list_kind='small'):
         res = ""
 
     for lst in ll:
-        if list_kind == 'tiny':
+        if list_kind == 'no-space':
             # Remove commas to reduce num of tokens required
             # and separate list of lists with ;
+            res += "[" + "".join(map(str, lst)) + "] ["
+        elif list_kind == 'tiny':
             res += " ".join(map(str, lst)) + "; "
         elif list_kind == 'normal':
             res += ",".join(map(str, lst)) + "],["

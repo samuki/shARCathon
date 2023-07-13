@@ -24,7 +24,7 @@ def basic_generator(generator, prompt, list_kind='small', max_len=MAX_NO_TOKENS)
 
 def main(json_path, kind='basic', list_kind='small'):
     data = load_json_data(DATA_DIR)
-    generator = pipeline('text-generation', model=MODEL), device="cuda:0")
+    generator = pipeline('text-generation', model=MODEL, device="cuda:0")
     count = 0
     for task, value in data.items():
         count += 1
@@ -33,10 +33,8 @@ def main(json_path, kind='basic', list_kind='small'):
         exp_result = get_expected_result(value, list_kind=list_kind)
         for prompt in prompts:
             print(f"\t|> Prompt: \n{prompt}")
-            no_tokens = len(TOKENIZER(prompt)['input_ids']) \
-                + len(TOKENIZER(exp_result)['input_ids'])
             print(f"\t|> Expected Result: \n{exp_result}")
-            result = basic_generator(generator, prompt, list_kind=list_kind, max_len=no_tokens)
+            result = basic_generator(generator, prompt, list_kind=list_kind)
             print(f"\t|> Result: \n{result}")
             add_datapoint(prompt, result, exp_result)
         if count > 3:
