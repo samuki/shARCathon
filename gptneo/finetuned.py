@@ -8,7 +8,7 @@ import os
 import random
 
 from . import MODEL, NO_GENERATED_RESULTS, \
-    MAX_NO_TOKENS, TOKENIZER, TRAIN_DATA_DIR, DATA_DIR, \
+    MAX_NO_TOKENS, TRAIN_DATA_DIR, DATA_DIR, \
     load_json_data, get_expected_result, select_best_answer
 from .prompts import get_prompts
 from .output import add_datapoint, dump_data

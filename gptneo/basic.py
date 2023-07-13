@@ -3,14 +3,14 @@
 from transformers import pipeline
 
 from . import \
-    MODEL, NO_GENERATED_RESULTS, TOKENIZER, DATA_DIR, \
+    MODEL, NO_GENERATED_RESULTS, DATA_DIR, MAX_NO_TOKENS, \
     load_json_data, get_expected_result, \
     select_best_answer
 from .prompts import get_prompts
 from .output import add_datapoint, dump_data
 
 
-def basic_generator(generator, prompt, list_kind='small', max_len=None):
+def basic_generator(generator, prompt, list_kind='small', max_len=MAX_NO_TOKENS):
     results = generator(
         prompt, num_return_sequences=NO_GENERATED_RESULTS, max_length=max_len)
     answers = [
