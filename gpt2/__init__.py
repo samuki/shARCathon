@@ -1,10 +1,8 @@
-from utils import load_json_data, get_logger
+from utils import load_json_data
 from transformers import set_seed, GPT2TokenizerFast
 import numpy as np
 
 # Configuration
-DEBUG = False
-# DEBUG = True
 SEED = 42  # None
 
 # MODEL = 'gpt2-small'

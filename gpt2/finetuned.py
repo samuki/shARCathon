@@ -9,6 +9,7 @@ from . import MODEL, NO_GENERATED_RESULTS, \
     MAX_NO_TOKENS, TOKENIZER, TRAIN_DATA_DIR, DATA_DIR, \
     load_json_data, get_expected_result, select_best_answer
 from .prompts import get_prompts
+from .output import add_datapoint, dump_data
 
 MODEL_DIR = os.path.abspath("./gpt2/data/gpt2-finetuned-model")
 TRAIN_PATH = os.path.abspath("./gpt2/data/gpt2-finetuned-data/train")
@@ -90,7 +91,7 @@ def basic_generator(generator, prompt, list_kind='small', max_len=MAX_NO_TOKENS)
     return result
 
 
-def main(logger, kind='basic', list_kind='small'):
+def main(json_path, kind='basic', list_kind='small'):
     global MODEL_DIR, TRAIN_PATH, TEST_PATH
     MODEL_DIR = os.path.abspath(f"./gpt2/data/gpt2-finetuned-{kind}-{list_kind}-model")
     TRAIN_PATH = os.path.abspath(f"./gpt2/data/gpt2-finetuned-{kind}-{list_kind}-data/train")
@@ -103,19 +104,16 @@ def main(logger, kind='basic', list_kind='small'):
 
     generator = pipeline('text-generation', model=MODEL, device="cuda:0")
 
-    count = 0
     for task, value in data.items():
-        logger.info(f"\t|> Task: {task}")
+        print(f"\t|> Task: {task}")
         prompts = get_prompts(value, kind=kind, list_kind=list_kind)
         exp_result = get_expected_result(value, list_kind)
         for prompt in prompts:
-            logger.info(f"\t|> Prompt: \n{prompt}")
+            print(f"\t|> Prompt: \n{prompt}")
             no_tokens = len(TOKENIZER(prompt)['input_ids']) \
                 + len(TOKENIZER(exp_result)['input_ids'])
             result = basic_generator(generator, prompt, list_kind=list_kind, max_len=no_tokens)
-            logger.info(f"\t|> Result: \n{result}")
-            logger.info(f"\t|> Expected Result: \n{exp_result}")
-        if len(prompts) > 0:
-            count += 1
-        if count > 30:
-            break
+            print(f"\t|> Result: \n{result}")
+            print(f"\t|> Expected Result: \n{exp_result}")
+            add_datapoint(prompt, result, exp_result)
+    dump_data(json_path)

@@ -37,4 +37,4 @@ def main(json_path, kind='basic', list_kind='small'):
             result = basic_generator(generator, prompt, list_kind=list_kind, max_len=no_tokens)
             print(f"\t|> Result: \n{result}")
             add_datapoint(prompt, result, exp_result)
-        dump_data(json_path)
+    dump_data(json_path)
