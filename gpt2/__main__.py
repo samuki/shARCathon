@@ -39,7 +39,7 @@ if __name__ == '__main__':
         print(WRONG_LISTREPR_MSG)
         exit(1)
 
-    json_path = f'./results/{"".join(sys.argv)}/{time.time()}.json'
+    json_path = f'./results/{"".join(sys.argv).replace("/", "")}/{time.time()}.json'
     os.makedirs(os.path.dirname(json_path), exist_ok=True)
 
     if (sys.argv[1] == "basic"):
