@@ -24,7 +24,7 @@ def basic_generator(generator, prompt, list_kind='small', max_len=MAX_NO_TOKENS)
 
 def main(json_path, kind='basic', list_kind='small'):
     data = load_json_data(DATA_DIR)
-    generator = pipeline('text-generation', model=MODEL), device="cuda:0")
+    generator = pipeline('text-generation', model=MODEL, device="cuda:0")
     count = 0
     for task, value in data.items():
         count += 1
