@@ -8,7 +8,7 @@ SEED = 42  # None
 # MODEL = 'gpt2-small'
 MODEL = 'gpt2-large'
 # MODEL = 'gpt2-xl'
-NO_GENERATED_RESULTS = 5
+NO_GENERATED_RESULTS = 1
 
 LIST_REPR_KINDS = [
     'no-space',
