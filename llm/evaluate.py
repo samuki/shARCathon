@@ -8,6 +8,7 @@ import gpt_utils
 import config
 import copy
 
+
 def format_percentage(percentage):
     """Formats percentage with two decimal points"""
     return f"{percentage * 100:.1f}"
@@ -33,6 +34,7 @@ def postprocess_representation(representation):
         representation = representation.replace(';', ':')
     return json.loads(representation)
 
+
 def evaluate_model_performance(ground_truth_folder, model_predictions_folder):
     """Evaluate the performance of language model"""
     task_files = list(ground_truth_folder.glob('*.json'))
@@ -53,7 +55,11 @@ def evaluate_model_performance(ground_truth_folder, model_predictions_folder):
             ground_truth_out = str(ground_truth['test']['output'])
             ground_truth_out = gpt_utils.preprocess_representation(ground_truth_out)
             result = gpt_utils.extract_result_text(prediction['output'])
-            postprocessed_result = gpt_utils.naive_postprocessing(result)
+            if 'ft-personal' in config.GPT_MODEL:
+                postprocessed_result = result.split("\nTest")[0]
+                postprocessed_result = postprocessed_result.strip()
+            else:
+                postprocessed_result = gpt_utils.naive_postprocessing(result)
             #print(postprocessed_result)
             try:
                 json_postprocessed_result = postprocess_representation(postprocessed_result)
@@ -82,7 +88,7 @@ def evaluate_model_performance(ground_truth_folder, model_predictions_folder):
             total_predictions += 1
         else:
             print(f'Task {task_file.name}: No prediction file found.')
-            break
+            
         print("Sparsec: ", sparsec)
         print("Sparsec: ", total_predictions)
         print("Sparsec acc ", sparsec/total_predictions)
@@ -93,6 +99,7 @@ if __name__ == "__main__":
     #model_name = "gpt-3.5-turbo-16k"
     #model_name = "code-davinci-002"
     model_name = "gpt-4"
+    model_name = config.GPT_MODEL
     replace_comma = "no_replace_comma"
     #replace_comma = "replace_comma"
     ground_truth_folder = Path("../data/evaluation_small")

@@ -28,8 +28,8 @@ BATCH_SIZE = 128
 
 # ---------------------- GPT CONFIG ---------------------
 
-#OPENAI_ENDPOINT = "Completion"
-OPENAI_ENDPOINT = "Chat"
+OPENAI_ENDPOINT = "Completion"
+#OPENAI_ENDPOINT = "Chat"
 
 # Select experiments to run
 PATH_SELECTION = VALID_SMALL_PATH
@@ -37,16 +37,17 @@ PATH_SELECTION = VALID_SMALL_PATH
 # GPT Models
 
 GPT_MODEL = "gpt-3.5-turbo-16k"
+#GPT_MODEL = "curie:ft-personal-2023-07-13-19-03-33"
 #GPT_MODEL = "code-davinci-002"
 #GPT_MODEL = "text-davinci-002"
 #GPT_MODEL = "gpt-3.5-turbo"
 #GPT_MODEL = "gpt-4"
 
 # Max token configuration to avoid length limit
-MAX_TOKENS = 4000
+MAX_TOKENS = 500
 #MAX_TOKENS = 6000
 #MODEL_MAX_TOKENS = 16000
-MODEL_MAX_TOKENS = 8192
+MODEL_MAX_TOKENS = 3000
 
 # OpenAI API parameters
 TEMPERATURE = 0
@@ -66,7 +67,7 @@ REPLACE_NUMBER_COLOR = False
 REPLACE_NUMBER_WORD = False
 REPLACE_NUMBER_BINARY = False
 REPLACE_NUMBER_LEET = False
-REPLACE_NUMBER_CHAR = True
+REPLACE_NUMBER_CHAR = False
 REPLACE_NUMBER_SP_CHAR = False
 # Prompt template
 #PROMPT_TEMPLATE = prompt_toolkit.BETTER_STRUCTURE_PREMEABLE
