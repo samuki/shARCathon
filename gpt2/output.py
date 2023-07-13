@@ -3,8 +3,9 @@ import json
 DATA = []
 
 
-def add_datapoint(prompt, result, exp_result):
+def add_datapoint(prompt, result, exp_result, taskId):
     dp = {
+        'taskId': taskId,
         'prompt': prompt,
         'result': result,
         'exp_result': exp_result,
