@@ -58,37 +58,22 @@ def main():
         # Copy due to inplace changes
         json_task = copy.deepcopy(value) 
         print(prompt)
-        # Call API
-        #print("ENCODING LEN %s", encoded_len)
-        """
-        result = gpt_utils.prompt_gpt(user+system)
-        print(f'First {gpt_utils.naive_postprocessing(gpt_utils.extract_result_text(result))}')
-        if config.SELF_CONSISTENCY:
-            prediction = gpt_utils.naive_postprocessing(gpt_utils.extract_result_text(result))
-            user = str(gpt_utils.get_task(json_task, task_name, self_correction=True))
-            prompt = system+user+f"{prediction}. Wait, no. 'output: '"
-            logger.info("SELF CONSISTENCY PROMPT %s", prompt)
-            result = gpt_utils.prompt_gpt(prompt)
-            print(f'Second {gpt_utils.naive_postprocessing(gpt_utils.extract_result_text(result))}')
-        if config.DOUBLE_SELF_CONSISTENCY:
-            prediction1 = gpt_utils.naive_postprocessing(gpt_utils.extract_result_text(result))
-            result2 = gpt_utils.prompt_gpt(user+system)
-            print(f'Second {gpt_utils.naive_postprocessing(gpt_utils.extract_result_text(result2))}')
-            prediction2 = gpt_utils.naive_postprocessing(gpt_utils.extract_result_text(result2))
-            user = str(gpt_utils.get_task(json_task, task_name, self_correction=True))
-            prompt = system+user+f"{prediction1} output 2:{prediction2}\nFinal output:"
-            logger.info("SELF CONSISTENCY PROMPT %s", prompt)
-            result = gpt_utils.prompt_gpt(prompt)
-            print(f'Third {gpt_utils.naive_postprocessing(gpt_utils.extract_result_text(result2))}')
 
-        logger.info("RESULTS %s", result)
-        # Save results
-        gpt_utils.save_gpt_results(task_name, prompt, result)
-        logger.info("COUNTER %s", counter)
-        counter += 1
-    """
-    print(total_tokens)
+        results = []
+
+        for i in range(5):
+
+            # Call API
+            result = gpt_utils.prompt_gpt(user+system)
+            result_output = gpt_utils.naive_postprocessing(gpt_utils.extract_result_text(result))
+
+            counter += 1
+
+            results.append(result_output)
         
+        gpt_utils.save_gpt_results(task_name, prompt, results)
+
+            
         
 if __name__ == "__main__":
     main()

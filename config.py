@@ -49,14 +49,14 @@ MAX_TOKENS = 4000
 MODEL_MAX_TOKENS = 8192
 
 # OpenAI API parameters
-TEMPERATURE = 0
+TEMPERATURE = 1
 TOP_P = 1
 LOG_PROBS = 5
 # Replace , since the model can solve this too.
 SPARSE_MATRIX = False
 COMPRESS = False
 
-REPLACE_COMMA = True
+REPLACE_COMMA = False
 REPLACE_SPACE = False
 REPLACE_SPACE2 = False
 SEMICOLON = False
