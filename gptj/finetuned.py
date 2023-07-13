@@ -2,8 +2,9 @@
 
 # TODO pjordan Adapt this to GPT-J
 
-from transformers import pipeline, GPT2LMHeadModel, TrainingArguments, \
-    Trainer, TextDataset, DataCollatorForLanguageModeling, GPT2Tokenizer
+from transformers import pipeline, GPTJForCausalLM, TrainingArguments, \
+    Trainer, TextDataset, DataCollatorForLanguageModeling, AutoTokenizer
+import torch
 import os
 import random
 
@@ -38,8 +39,12 @@ def create_train_data(data, train_path, test_path, kind, list_kind, test_prob=0.
 
 
 def train(kind, list_kind, data):
-    tokenizer = GPT2Tokenizer.from_pretrained(MODEL)
-    model = GPT2LMHeadModel.from_pretrained(MODEL)
+    tokenizer = AutoTokenizer.from_pretrained(MODEL)
+    model = GPTJForCausalLM.from_pretrained(
+        MODEL,
+        revision="float16",
+        torch_dtype=torch.float16,
+    ).to("cuda")
     create_train_data(data, TRAIN_PATH, TEST_PATH, kind, list_kind)
 
     training_args = TrainingArguments(
