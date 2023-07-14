@@ -33,6 +33,11 @@ overall correctness (%): 0.0
 dimens. correctness (%): 4.7619
 correct elems (%):       66.6667
 correct elems (abs):     72
+-------------------------- gptj basicstep-by-stepnormal --------------------------
+overall correctness (%): 4.4776
+dimens. correctness (%): 38.806
+correct elems (%):       51.6896
+correct elems (abs):     413
 -------------------------- gptneo finetunedapply-patternstiny --------------------------
 overall correctness (%): 0.0
 dimens. correctness (%): 12.2807
@@ -179,6 +184,11 @@ overall correctness (%): 1.6393
 dimens. correctness (%): 11.4754
 correct elems (%):       38.7097
 correct elems (abs):     60
+-------------------------- gptj basicapply-patternsnormal --------------------------
+overall correctness (%): 0.0
+dimens. correctness (%): 25.7576
+correct elems (%):       52.2936
+correct elems (abs):     228
 -------------------------- gpt2 basicapply-patternstiny --------------------------
 overall correctness (%): 0.0
 dimens. correctness (%): 0.0
