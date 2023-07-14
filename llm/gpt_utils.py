@@ -176,12 +176,21 @@ def preprocess_training(task):
     return preprocess_representation(intro+ train_string + divider + test_string)
 
 
-def preprocess_prompt(task):
+def preprocess_prompt_step_by_step(task):
     intro = "Do the following:\nWhat is the step by step description of the input/output relation that holds for all example input/output pairs?\n"
     train_string = "Examples: "
     for example in task['train']:
         train_string += f"input: {str(example['input'])} output: {str(example['output'])} \n"
     divider = "You now have all the information to solve the task. Apply this description to the test input and write you answer as 'output: '\n"
+    test_string = f"Test: input: {str(task['test']['input'])} output:"
+    return preprocess_representation(intro+ train_string + divider + test_string)
+
+def preprocess_prompt(task):
+    intro = "Continue the pattern"
+    train_string = "Examples: "
+    for example in task['train']:
+        train_string += f"input: {str(example['input'])} output: {str(example['output'])} \n"
+    divider = ""
     test_string = f"Test: input: {str(task['test']['input'])} output:"
     return preprocess_representation(intro+ train_string + divider + test_string)
 
