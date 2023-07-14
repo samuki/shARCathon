@@ -45,7 +45,9 @@ To prepare our test data we recommend you to run the following commands in your 
 unzip ./data/ARC-800-tasks.zip -d ./data
 python filter_data.py
 mv ./data/evaluation ./data/evaluation_orig
-mv ./data/evaluation_small ./data/evaluation
+cp -r ./data/evaluation_small ./data/evaluation
+mkdir -p ./majority/data/
+cp -r ./data/evaluation_small ./majority/data/evaluation_small
 ```
 
 Additionally our GPT3 and 4 code relies on the OpenAI API.
@@ -78,7 +80,8 @@ python query_gpt.py
 
 ### Self Consistency Evaluation
 ```bash
-python query_gpt_task_2.py
+cd majority
+python query_gpt_task2.py
 ```
 
 
