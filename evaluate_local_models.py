@@ -1,6 +1,17 @@
 #!/usr/bin/env python
 import json
 import os
+from transformers import AutoTokenizer
+
+GPT2_TOKENIZER = AutoTokenizer.from_pretrained('gpt2-large')
+GPTNEO_TOKENIZER = AutoTokenizer.from_pretrained('EleutherAI/gpt-neo-1.3B')
+GPTJ_TOKENIZER = AutoTokenizer.from_pretrained('EleutherAI/gpt-j-6B')
+
+MODEL_TOKENIZERS = {
+    'gpt2': GPT2_TOKENIZER,
+    'gptneo': GPTNEO_TOKENIZER,
+    'gptj': GPTJ_TOKENIZER,
+}
 
 RES_START = "Out:"
 
@@ -93,16 +104,25 @@ def evaluate_json(file, show_each_task=True):
         print("Failed reading file " + file)
         return
 
+    model = os.path.dirname(file) \
+        .replace('results/', '') \
+        .split('shARCathon')[1] \
+        .split('__main__.py')[0].strip()
+    tokenizer = MODEL_TOKENIZERS[model]
+
     overall_correct, overall_dim_correct = 0, 0
     overall_no_correct_elems, overall_no_total_elems = 0, 0
+    overall_token_count = 0
     for elem in d:
         taskId, exp_result = elem["taskId"], elem["exp_result"]
 
         result = find_result(elem["result"], exp_result)
+        token_count = len(tokenizer(elem["prompt"])["input_ids"])
         eval = evaluate_result(result, exp_result)
 
         overall_correct += eval['correct']
         overall_dim_correct += eval['dim_correct']
+        overall_token_count += token_count
         if eval['dim_correct']:
             overall_no_correct_elems += eval['elems_correct']
             overall_no_total_elems += eval['elems_total']
@@ -116,11 +136,13 @@ def evaluate_json(file, show_each_task=True):
             print(f"\t dimens. correctness: {eval['dim_correct']}")
             print(f"\t no correct elems:    {eval['elems_correct']}")
             print(f"\t no total elems:      {eval['elems_total']}")
+            print(f"\t no tokens:           {token_count}")
             print()
 
     overall_correct /= len(d)
     overall_dim_correct /= len(d)
-    overall_correct_elems = overall_no_correct_elems / max(overall_no_total_elems, 1)
+    overall_correct_elems = overall_no_correct_elems / \
+        max(overall_no_total_elems, 1)
 
     name = ' '.join(os.path.dirname(file)
                     .replace('results/', '')
@@ -133,6 +155,7 @@ def evaluate_json(file, show_each_task=True):
     print(f"dimens. correctness (%): {round(overall_dim_correct * 100, 4)}")
     print(f"correct elems (%):       {round(overall_correct_elems * 100, 4)}")
     print(f"correct elems (abs):     {overall_no_correct_elems}")
+    print(f"overall no tokens:       {overall_token_count}")
 
 
 def main():
