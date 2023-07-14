@@ -3,6 +3,7 @@
 
 ## Project Structure
 
+```
 .
 ├──── cnn : cnn baseline model
 ├──── data : extract ARC-800 zip here
@@ -24,3 +25,7 @@
 ├──── task.json : contains manual mapping of task labels to tasks
 ├──── train_cnn.py : train cnn baseline model
 ├──── utils.py : util functions
+```
+
+
+
