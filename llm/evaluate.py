@@ -56,7 +56,7 @@ def evaluate_model_performance(ground_truth_folder, model_predictions_folder):
             ground_truth_out = gpt_utils.preprocess_representation(ground_truth_out)
             result = gpt_utils.extract_result_text(prediction['output'])
             if 'ft-personal' in config.GPT_MODEL:
-                postprocessed_result = result.split("\nTest")[0]
+                postprocessed_result = (result.split("\n")[0]).split("input")[0]
                 postprocessed_result = postprocessed_result.strip()
             else:
                 postprocessed_result = gpt_utils.naive_postprocessing(result)
@@ -98,10 +98,13 @@ def evaluate_model_performance(ground_truth_folder, model_predictions_folder):
 if __name__ == "__main__":
     #model_name = "gpt-3.5-turbo-16k"
     #model_name = "code-davinci-002"
-    model_name = "gpt-4"
+    #model_name = "gpt-4"
+    #GPT_MODEL = "gpt-3.5-turbo-16k"
+    model_name = "curie:ft-personal-2023-07-13-23-33-27"
+    model_name = "davinci:ft-personal-2023-07-13-23-36-51"
     model_name = config.GPT_MODEL
-    replace_comma = "no_replace_comma"
-    #replace_comma = "replace_comma"
+    #replace_comma = "no_replace_comma"
+    replace_comma = "replace_comma"
     ground_truth_folder = Path("../data/evaluation_small")
     predictions_base_folder = Path("../results/evaluation_small_colors_gpt3.5_gpt4") # colors
     predictions_base_folder = Path("../results/evaluation_small_double_semicolon")
