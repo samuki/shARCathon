@@ -12,7 +12,9 @@ def main():
     # Log results
     logger = utils.get_logger()
     # Get token counter
-    encoding = tiktoken.encoding_for_model(config.GPT_MODEL)
+    #encoding = tiktoken.encoding_for_model(config.GPT_MODEL)
+    encoding_model = config.GPT_MODEL if not "ft-personal" in config.GPT_MODEL else config.GPT_MODEL.split(":")[0]
+    encoding = tiktoken.encoding_for_model("gpt-4")
     folder = str(config.PATH_SELECTION.resolve())
     tasks = utils.load_json_data(folder)
     training_tasks = utils.load_json_data(str(config.TRAIN_SMALL_PATH))
@@ -60,7 +62,7 @@ def main():
         print(prompt)
         # Call API
         #print("ENCODING LEN %s", encoded_len)
-        """
+        
         result = gpt_utils.prompt_gpt(user+system)
         print(f'First {gpt_utils.naive_postprocessing(gpt_utils.extract_result_text(result))}')
         if config.SELF_CONSISTENCY:
@@ -80,13 +82,14 @@ def main():
             logger.info("SELF CONSISTENCY PROMPT %s", prompt)
             result = gpt_utils.prompt_gpt(prompt)
             print(f'Third {gpt_utils.naive_postprocessing(gpt_utils.extract_result_text(result2))}')
-
+        
         logger.info("RESULTS %s", result)
         # Save results
         gpt_utils.save_gpt_results(task_name, prompt, result)
         logger.info("COUNTER %s", counter)
         counter += 1
-    """
+        
+    
     print(total_tokens)
         
         
