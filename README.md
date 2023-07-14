@@ -24,6 +24,7 @@
 ├──── task.json : contains manual mapping of task labels to tasks
 ├──── train_cnn.py : train cnn baseline model
 ├──── utils.py : util functions
+├──── majority: folder containing data for self-consistency experiments
 ```
 
 ## Requirements
@@ -83,7 +84,11 @@ python query_gpt.py
 cd majority
 python query_gpt_task2.py
 ```
+The notebooks performing analysis of the self-consistency results can also be found in the majority folder. 
 
+1. evaluate_task2_gpt.ipynb (general evaluation of self-consistency experiments with true/false)
+2. evaluate_majority_voting.ipynb (experiments to perform majority-voting on sampled values)
+3. plot_majority_voting.ipynb (plot results)
 
 ## Appendix
 For ease of understanding the outputs, we have accumulated some additional example output and the hyperparameters used for finetuning.
