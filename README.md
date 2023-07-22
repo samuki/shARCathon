@@ -93,7 +93,7 @@ The notebooks performing analysis of the self-consistency results can also be fo
 ## Appendix
 For ease of understanding the outputs, we have accumulated some additional example output and the hyperparameters used for finetuning.
 
-### Prior Prompt
+### Prior Prompt (reference: https://github.com/tanchongmin/ARC-Challenge/tree/main)
 ```
 You are given a series of inputs and output pairs. 
     These are all in the form of a 2D array, representing a 2D grid, with values from 0-9. 
