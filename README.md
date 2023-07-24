@@ -187,6 +187,11 @@ temperature = 0
 max_tokens  = 4000
 ```
 
+## Task Categories
+
+We categorize the tasks into various classes.  
+See [task.json](https://github.com/samuki/shARCathon/blob/main/task.json) for the categorization of each task.  
+View the [task evaluation notebook](https://github.com/samuki/shARCathon/blob/main/task_evaluation.ipynb) for visual examples of each class.  
 
 
 
